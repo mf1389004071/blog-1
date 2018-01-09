@@ -1,0 +1,96 @@
+@font-face {
+  font-family: 'icomoon';
+  src: url("/fonts/icomoon.eot"), url("/fonts/icomoon.svg"), url("/fonts/icomoon.ttf"), url("/fonts/icomoon.woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.icon {
+  font-family: "icomoon" !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  display: inline-block;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-search:before {
+  content: "\f002";
+}
+
+.icon-rss:before {
+  content: "\f09e";
+}
+
+.icon-time:before {
+  content: "\f073";
+}
+
+.icon-see:before {
+  content: "\f06e";
+}
+
+.icon-eject:before {
+  content: "\f077";
+}
+
+.icon-menu:before {
+  content: "\f00b";
+}
+
+.icon-type:before {
+  content: "\f07b";
+}
+
+.icon-price-type:before {
+  content: "\f07c";
+}
+
+.icon-tag:before {
+  content: "\f02b";
+}
+
+.icon-price-tag:before {
+  content: "\f02c";
+}
+
+.icon-windows:before {
+  content: "\eac2";
+}
+
+.icon-apple:before {
+  content: "\eabe";
+}
+
+.icon-android:before {
+  content: "\eac0";
+}
+
+.icon-chrome:before {
+  content: "\ead9";
+}
+
+.icon-firefox:before {
+  content: "\eada";
+}
+
+.icon-ie:before {
+  content: "\eadb";
+}
+
+.icon-edge:before {
+  content: "\eadc";
+}
+
+.icon-safari:before {
+  content: "\eadd";
+}
+
+.icon-opera:before {
+  content: "\eade";
+}

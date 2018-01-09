@@ -1,0 +1,38 @@
+
+//- 网站首页
+
+extends ../common/layout
+
+block content
+
+    mixin article(article)
+        .article-header.clearfix
+            h1.article-title
+                a(href=`/article/${article._id}`, title=article.title, type='ajax_a') #{article.title}
+            ul.article-info
+                li
+                    i.icon.icon-time
+                    span #{article.time}
+                li
+                    i.icon.icon-type
+                    span #{article.type}
+                li
+                    i.icon.icon-see
+                    span #{article.pageview}
+        .article-body.markdownInfo.clearfix
+            p #{article.outline}
+        .article-footer.clearfix
+            .article-tags
+                ul.article-tag-list
+                    each tag in article.tags
+                        li.article-tag-list-item
+                            a(href=`/tag/${tag}/`, type='ajax_a') ##{tag}
+
+    if (articles.length == 0)
+        h4.NoData 未查询到数据
+    else
+        article#article-list
+            each item in articles
+                section.article-box
+                    +article(item)
+    .page-box !{HTMLPage}

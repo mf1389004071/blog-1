@@ -1,0 +1,29 @@
+
+//- 文章页面
+
+extends ../common/layout
+
+block content
+	article.article-box
+		.article-header
+			h1.article-title
+				a(href='/article/#{article._id}', title='#{article.title}', type='ajax_a') #{article.title}
+			ul.article-info
+				li
+					i.icon.icon-time
+					span #{article.date}
+				li
+					i.icon.icon-type
+					span #{article.type}
+				li
+					i.icon.icon-see
+					span #{article.pageview}
+
+		.article-body.markdownInfo.clearfix !{article.html}
+
+		.article-footer.clearfix
+			a.article-share-link(href='/article/#{article.id}') share
+			ul.article-tag-list
+				each tag in article.tags
+					li.article-tag-list-item
+						a(href='/tag/#{tag}/', type='ajax_a') ##{tag}

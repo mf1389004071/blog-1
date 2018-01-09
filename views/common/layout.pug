@@ -1,0 +1,68 @@
+//- 通用页面
+
+doctype
+html
+	head
+		meta(charset="utf-8")
+		meta(name='viewport', content='initial-scale=1.0, maximum-scale=1.0, user-scalable=no')
+		meta(name='apple-mobile-web-app-capable', content='yes')
+		meta(http-equiv="X-UA-Compatible", content="IE=edge,chrome=1")
+		meta(name="apple-mobile-web-app-status-bar-style", content="black-translucent")
+		meta(name="description", content=meta_description)
+		meta(name="keywords", content=meta_keywords)
+		meta(name="Copyright" Content="本页版权归 香菜 所有。")
+		meta(name="Author" Content="香菜, guanquanhong@163.com")
+		title #{meta_title || title}
+		link(href='//fonts.googleapis.com/css?family=Source+Code+Pro', rel='stylesheet')
+		link(href='/css/icon.css', rel='stylesheet')
+		link(href='/css/index.css', rel='stylesheet')
+	body
+		// top button start
+		div.totop-btn.icon.icon-eject
+		// top button end
+
+		// header start
+		include header
+		// header end
+
+		// body start
+		div.body-container.clearfix
+			.major-box
+				.major-content
+					block content
+			.aside-box
+				.widget-text.search-box
+					form#search(action="/search", method="get")
+						input(type="search", name="keyword", placeholder="搜索 (●'◡'●)")
+						button.icon.icon-search(type="submit")
+				.widget-text.music-box
+					#aplayer.aplayer
+				.widget-text
+					h3.widget-title types
+					ul.widget-content.types-list
+						each item in navs
+							li
+								a(href=`/category/${item._id}`, type='ajax_a')
+									i.icon.icon-price-type
+									span #{item._id} (#{item.count})
+
+				.widget-text
+					h3.widget-title tags
+					ul.widget-content.tags-list.clearfix
+						each item in tags
+							li
+								a(href=`/tag/${item}`, type='ajax_a') #{item}
+
+				.widget-text
+					h3.widget-title disclaimer
+					div.widget-content.explain
+						p 
+							small 本站只提供资讯，不提供任何上传下载服务，所有内容均来自分享站点所提供的公开引用资讯。 如果有版权违规内容，请通知作者删除。 
+						p 
+							small 本站不支持IE8浏览器 如果网页显示不正常，请升级到IE9及以上 推荐使用 Firefox、Chrome 等专业浏览器。
+						p.site-time
+		// body end
+
+		// footer start
+		include footer
+		// footer end

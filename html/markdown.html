@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>markdown转html</title>
+    <style media="screen">
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      header { margin: 10px; padding: 20px 10px; border-bottom: 1px solid #e1e1e1; }
+      header > h1 { font-size: 18px; }
+      main { margin: 0 10px; display: flex; justify-content: space-between; height: 600px; }
+      main > div { width: 49%; height: 100%; border: 1px solid #e1e1e1; overflow: auto; outline: none; font-size: 12px; line-height: 24px; padding: 10px; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>使用marked转换html</h1>
+    </header>
+    <main>
+      <div class="body-input" contenteditable='true'></div>
+      <div class="body-output markdownInfo"></div>
+    </main>
+  </body>
+  <script type="text/javascript" src="/lib/marked.js"></script>
+  <script type="text/javascript">
+    window.onload = function() {
+        var input = document.getElementsByClassName('body-input')[0];
+
+        input.oninput = function() {
+          var markdown = this.innerText;
+          var html = marked(markdown);
+          document.getElementsByClassName('body-output')[0].innerHTML = html;
+        }
+    }
+  </script>
+</html>

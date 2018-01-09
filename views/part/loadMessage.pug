@@ -1,0 +1,19 @@
+//- 通过ajax加载的留言
+
+each item in data
+    section.message-li
+        .comment
+            .comment-avatar
+                img(src=item.avatar, title=item.nickname)
+            .comment-body
+                .comment_author
+                    a(href=item.link || "javascript:;", title=item.nickname) #{item.nickname}
+                if(item.replyid)
+                    .comment_quote
+                        p @#{item.replyname}
+                        p #{item.replycontent}
+                .comment_text
+                    p #{item.content}
+                .comment_other
+                    small #{item.time}
+                    a(href='javascript:;', data-id=item._id, data-nickname=item.nickname onclick='messageReply(this)') 回复

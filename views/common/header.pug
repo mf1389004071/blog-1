@@ -1,0 +1,23 @@
+header.header-container
+	.header-banner
+		.header-inner-mask
+		.header-inner.clearfix
+			nav.main-nav
+				a.main-nav-link(href='/', type='ajax_a') Home
+				a.main-nav-link(href='/articles', type='ajax_a') Articles
+				a.main-nav-link(href='/links', type='ajax_a') Links
+				a.main-nav-link(href='/message', type='ajax_a') Message
+				a.main-nav-link(href='/about', type='ajax_a') About
+			.mobile-nav
+				a.main-nav-link.icon.icon-menu
+				h1 #{title}
+				nav.mobile-navs
+					a.mobile-nav-link(href='/', type='ajax_a') Home
+					a.mobile-nav-link(href='/articles', type='ajax_a') Articles
+					a.mobile-nav-link(href='/links', type='ajax_a') Links
+					a.mobile-nav-link(href='/message', type='ajax_a') Message
+					a.mobile-nav-link(href='/about', type='ajax_a') About
+			.mobile-mask
+	.header-content
+		a.header-title(href='/') #{title}
+		p.header-subtitle #{description}

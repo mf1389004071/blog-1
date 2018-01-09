@@ -1,0 +1,17 @@
+//- 新添加的留言
+section.message-li.messageNew
+  .comment
+    .comment-avatar
+      img(src=data.avatar, title=data.nickname)
+    .comment-body
+      .comment_author
+        a(href=data.link || "javascript:;", title=data.nickname) #{data.nickname}
+      if(data.replyid)
+        .comment_quote
+          p @#{data.replyname}
+          p #{data.replycontent}
+      .comment_text
+        p #{data.content}
+      .comment_other
+        small #{data.time}
+        a(href='javascript:;', data-id=data._id, data-nickname=data.nickname, onclick='messageReply(this)') 回复

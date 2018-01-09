@@ -1,0 +1,40 @@
+
+//- 友情链接
+
+extends ../common/layout
+
+block content
+
+    .page-title-box.link
+        .page-title-content
+            h1 Links
+            p 小伙伴的传送门 方便串门 2333。
+            
+    if (!links)
+        h4.NoData 未查询到数据！
+    else
+        article.links-box
+            section.link-group
+                h4 【 小伙伴们 】
+                ul.lins-box
+                    each item in links.partner
+                        li.link-section
+                            a(href=item.link, target="_blank")
+                                p.link-title #{item.name}
+                                p.link-describe #{item.describe || '******'}
+            section.link-group
+                h4 【 一些实用网站 】
+                ul.lins-box
+                    each item in links.tool
+                        li.link-section
+                            a(href=item.link, target="_blank")
+                                p.link-title #{item.name}
+                                p.link-describe #{item.describe || '******'}
+            section.link-group
+                h4 【 其他一些网站 】
+                ul.lins-box
+                    each item in links.other
+                        li.link-section
+                            a(href=item.link, target="_blank")
+                                p.link-title #{item.name}
+                                p.link-describe #{item.describe || '******'}

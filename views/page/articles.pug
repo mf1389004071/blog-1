@@ -1,0 +1,24 @@
+
+//- 文章归档
+
+extends ../common/layout
+
+block content
+
+	.page-title-box.articles
+		.page-title-content
+			h1 ARCHIVES
+			p 文章归档
+
+	if (articles.length == 0)
+		h4.NoData 未查询到数据
+	else
+		article.articles-box
+			- for (var i = 0; i < articles.length; i ++)
+				div.articles-group
+					h3.articles-date # #{articles[i]._id}
+					ul.articles-li
+						- for (var j = 0; j < articles[i].count; j++)
+							li
+								a.article-title(type='ajax_a', href=`/article/${articles[i].id[j]}`) · #{articles[i].title[j]}
+								span (#{articles[i].pageview[j]})
