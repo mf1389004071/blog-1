@@ -105,4 +105,4 @@ function getAvatar(QQ) {
 	return '//q1.qlogo.cn/g?b=qq&nk=' + QQ + '&s=100&t=' + new Date().getTime()
 }
 
-module.exports = router;
+module.exports = router
