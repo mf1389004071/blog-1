@@ -1,3 +1,11 @@
+
+@font-face {
+	font-family: "Source Han Sans";
+	font-weight: normal;
+	font-style: normal;
+	src: url("/fonts/Source Han Sans.ttf");
+}
+
 html, body, div, span, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 abbr, address, cite, code,
@@ -21,6 +29,7 @@ time, mark, audio, video {
 
 body {
     font-size: 14px;
+    font-family: "Source Han Sans";
     line-height:1;
 }
 

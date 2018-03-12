@@ -11,6 +11,7 @@ var Motto 		= mongoose.model('Motto', schemas.MottoSchema)
 var Link        = mongoose.model('Link', schemas.LinkSchema)
 var Message 	= mongoose.model('Message', schemas.MessageSchema)
 var Config      = mongoose.model('Config', schemas.ConfigSchema, 'config')
+var VisitHistory= mongoose.model('VisitHistory', schemas.VisitHistorySchema, 'visit_history')
 
 // 抛出模型
-module.exports  = { Article, Link, Motto, Message, Config }
+module.exports  = { Article, Link, Motto, Message, Config, VisitHistory }

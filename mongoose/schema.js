@@ -49,6 +49,13 @@ var ConfigSchema = new mongoose.Schema({
 	password: String
 })
 
+var VisitHistorySchema = new mongoose.Schema({
+	nickname: String,
+	link: String,
+	avatar: String,
+	datetime: Date
+})
+
 
 // ===> 设置静态方法
 
@@ -395,6 +402,32 @@ ConfigSchema.statics = {
 	}
 }
 
+// 为模式添加方法 （每次存储数据前都会调用这个方法）
+VisitHistorySchema.pre('save', function(next) {
+	this.datetime = Date.now()
+	next()
+})
+
+VisitHistorySchema.statics = {
+	fetch: function(cb) {
+		return this
+			.find({})
+			.limit(10)
+			.exec(cb)
+	},
+	fetchOnly: function(id, cb) {
+		return this
+			.findOne({}, { _id: id })
+			.exec(cb)
+	},
+	update: function(user) {
+		
+	},
+	add: function(user, cb) {
+		var _user = new this(user)
+		return _user.save(cb)
+	}
+}
 
 // ===> 抛出模式
-module.exports = {ArticleSchema, LinkSchema, MottoSchema, MessageSchema, ConfigSchema}
+module.exports = {ArticleSchema, LinkSchema, MottoSchema, MessageSchema, ConfigSchema, VisitHistorySchema}

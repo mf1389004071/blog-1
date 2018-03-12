@@ -1,5 +1,4 @@
 //- 通过ajax加载的留言
-
 each item in data
     section.message-li
         .comment
@@ -16,4 +15,4 @@ each item in data
                     p #{item.content}
                 .comment_other
                     small #{item.time}
-                    a(href='javascript:;', data-id=item._id, data-nickname=item.nickname onclick='messageReply(this)') 回复
+                    a(href='javascript:;', data-id=item._id, data-nickname=item.nickname onclick='replyMessage(this)') 回复

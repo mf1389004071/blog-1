@@ -219,6 +219,16 @@ router.get('/links', function(req, res) {
 	asyncLink()
 })
 
+// about page
+router.get('/about', function(req, res) {
+	GetCommon(result => {
+		let about = marked(fs.readFileSync('./html/about.md', 'utf8'));
+		result.meta_title = '关于 - ' + result.title
+		result.html = about
+		res.render('page/about', result)
+	})
+})
+
 // message page
 router.get('/message', function(req, res) {
 	let page = 1
@@ -268,16 +278,6 @@ router.get('/message', function(req, res) {
 	model.Message.fetch(null, 1, page, function(err, messages) {
 		if(err) return res.send(err)
 		asyncReply(messages)
-	})
-})
-
-// about page
-router.get('/about', function(req, res) {
-	GetCommon(result => {
-		let about = marked(fs.readFileSync('./html/about.md', 'utf8'));
-		result.meta_title = '关于 - ' + result.title
-		result.html = about
-		res.render('page/about', result)
 	})
 })
 
@@ -383,7 +383,6 @@ router.post('/message/add', function(req, res) {
 		}
 	})
 })
-
 
 // 返回playlist
 router.get('/musiclist', function(req, res) {

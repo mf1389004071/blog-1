@@ -54,7 +54,6 @@
 	if(window.console && window.console.log) {
 		console.log("\n %c i am here %c https://www.miiiku.xyz \n\n", "color: #fff; background: #ff3365; padding: 5px 0px", "background: #efefef; padding: 5px 0px")
 	}
-
 })(jQuery, undefined)
 
 // 设置游览器保存的地址
@@ -248,7 +247,7 @@ function messageSubmit(el) {
 		if(!data) return $.alert("获取数据格式错误！", 'error');
 		$.alert("DUANG~ 留言成功！", 'success');
 		$(".message-list").prepend(data)
-		form.reset()
+		form.content.value = ''
 	}, function() {
 		$(el).removeAttr('disabled')
 	})

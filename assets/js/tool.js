@@ -1,5 +1,4 @@
 ;(function($) {
-
     $.extend({
         alert: function(str, state, timeout, callback) {
             var icon = ''
@@ -122,3 +121,5 @@
     })
 
 })(jQuery)
+
+const log = window.console.log.bind(window.console)

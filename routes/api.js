@@ -29,9 +29,7 @@ router.get('/message/page/:page', function(req, res) {
 			item = item.replyid ? await loadReply(item) : item
 		}
 		
-		res.render('part/loadMessage', {
-			data: messages
-		})
+		res.render('part/loadMessage', { data: messages })
 	}
 
 	model.Message.fetch(null, 1, page, function(err, messages) {
@@ -86,14 +84,15 @@ router.post('/message/add', function(req, res) {
 	creatMessage.save(function(err, messageUpdate) {
 		if(err) res.send(err)
 
-		messageUpdate.time = moment(messageUpdate.datetime).format('YYYY-MM-DD HH:mm:ss')
-		messageUpdate.avatar = getAvatar(messageUpdate.qq);
-
 		email.sendEmail({
 			sendee: '81085036@qq.com',
 			subject: '《我在这里 - 有新的留言》',
 			text: '有新的留言！',
-			html: '<p>留言人:' + messageUpdate.nickname + '</p><p>留言内容：' + messageUpdate.content + '</p><p>留言时间：' + messageUpdate.datetime + '</p>'
+			html: `
+				<p>留 言 人 : ${messageUpdate.nickname}</p>
+				<p>留言内容	：${messageUpdate.content}</p>
+				<p>留言时间	：${messageUpdate.datetime}</p>
+			`
 		})
 
 		asyncReply(messageUpdate)
