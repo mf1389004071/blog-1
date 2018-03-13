@@ -7,7 +7,8 @@ querystring = require('querystring'), 	// 参数处理模块
 express 	= require('express'), 		// express 框架
 bodyParser 	= require('body-parser'),  	// 获取post数据
 cookieParser= require('cookie-parser'),	// 用来弄cookie 的
-mongoose    = require('mongoose');		// 操作数据库
+mongoose    = require('mongoose'),		// 操作数据库
+utils       = require('./module/utils');// 工具
 
 // 连接数据库
 mongoose.Promise = global.Promise;
@@ -53,11 +54,9 @@ var routerAPI = require('./routes/api')
 app.use('/', routerIndex)
 app.use('/api/', routerAPI)
 
-
-
 // 404 这个一定要放在最后面
 app.get('*', function(req, res) {
-	routerIndex.GetCommon(data => {
+	utils.GetCommon(data => {
 		res.render('page/404', data)
 	})
 })

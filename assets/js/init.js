@@ -78,11 +78,11 @@ function totop(callback) {
 
 // 获取网站存活天数
 function getday() {
-  var startTime = new Date("2016-12-05 00:00:00");
-  var currentTime = new Date();
-  var timeold = currentTime.getTime() - startTime.getTime();
-  var day = Math.floor(timeold/1000/60/60/24);
-  $('.site-time').html('站点已存活 ' + day + ' 天')
+  var startTime = new Date("2016-12-05 00:00:00")
+  var nowTime = new Date()
+  var oldTime = nowTime.getTime() - startTime.getTime()
+  var day = Math.floor(oldTime/1000/60/60/24)
+  $('.site-time').html(`站点已存活${day}天`)
 }
 
 // 初始化音乐播放器
@@ -150,9 +150,10 @@ function initMusic() {
  
 // 获取页面
 function loadPage(url) {
-	$('.major-box').empty().append('<div class="loader"></div>')
- 
+	$('body').append('<div class="loader"></div>')
+
 	$(".major-box").load(url + ' .major-content', function(response, status, xhr) {
+		$('body .loader').remove()
 		if(!response || status == 'error') return loadError()
 		var startIndex = response.indexOf('<title>')
 		var endIndex = response.indexOf('</title>')
@@ -163,15 +164,17 @@ function loadPage(url) {
 
 // 加载错误
 function loadError() {
-	$('.major-content').html(`
+	var errorTITLE = 'Error - ' + $('title').text().split(' - ')[1]
+	var errorHTML = `
 		<article class="other-box">
 			<h3>Error</h3>
 			<p>加载错误 请稍后再试！</p>
 			<p>确保网络能够正常访问！</p>
 			<p>(。﹏。*)</p>
 		</article>
-	`)
-	$('title').html('Error')
+	`
+	$('.major-content').html(errorHTML)
+	$('title').html(errorTITLE)
 }
 
 // 加载留言
@@ -181,9 +184,14 @@ function loadMessage(el) {
 	if($load.hasClass('load-message-animation')) return console.log('加载中。。。')
 	if($load.hasClass('end')) return console.log('加载完成。。。')
 
-	var page = $load.data("page") || 2
+	var page = $load.data('page') || 2
 	var loadTHML = $load.text()
-	var loadDOM = '<div class="rect1"></div><div class="rect2"></div><div class="rect3"></div><div class="rect4"></div><div class="rect5"></div>';
+	var loadDOM = `	<div class="rect1"></div>
+					<div class="rect2"></div>
+					<div class="rect3"></div>
+					<div class="rect4"></div>
+					<div class="rect5"></div>
+	`
  
 	AjaxGetMessage(page, function() {
 		$load.empty().append(loadDOM).addClass("load-message-animation")
@@ -195,6 +203,9 @@ function loadMessage(el) {
 			$load.data("page", ++page)
 			$(".message-list").append(data)
 		}
+	}, function(err) {
+		$.alert('加载留言失败，请稍后再试~')
+		$load.empty().removeClass("load-message-animation").text(loadTHML)
 	})
 }
  
@@ -231,9 +242,9 @@ function messageSubmit(el) {
 	   return $.alert("请留下你的名字叭！", 'waring')
 	}
  
-	if($.trim(form.avatar.value)   == "") {
-	   form.avatar.focus()
-	   return $.alert("留下扣扣号并不会怀*！", 'waring')
+	if($.trim(form.email.value)   == "") {
+	   form.email.focus()
+	   return $.alert("留下邮箱号并不会怀*！", 'waring')
 	}
  
 	if($.trim(form.content.value)  == "") {

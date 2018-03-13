@@ -32,7 +32,7 @@ var MottoSchema = new mongoose.Schema({
 
 var MessageSchema = new mongoose.Schema({
 	nickname: String,
-	qq: String,
+	email: String,
 	link: String,
 	content: String,
 	state: Number,

@@ -20,6 +20,19 @@ function requests(options) {
     $.ajax(requestObj)
 }
 
+
+function login(code, success) {
+    requests({
+        url: 'api/login',
+        type: 'POST',
+        data: JSON.stringify({ code }),
+        success: success,
+        error: function(err) {
+            alert('登陆失败，服务器错误！')
+        }
+    })
+}
+
 /**
  * 异步加载留言
  * 
@@ -27,14 +40,12 @@ function requests(options) {
  * @param {any} beforeSend 请求前
  * @param {any} success 成功回调
  */
-function AjaxGetMessage(page, beforeSend, success) {
+function AjaxGetMessage(page, beforeSend, success, error) {
     requests({
         url: 'api/message/page/' + page,
         beforeSend: beforeSend,
         success: success,
-        error: function(err) {
-            alert('加载留言信息失败！')
-        }
+        error: error
     })
 }
 
@@ -57,18 +68,5 @@ function AjaxAddMessage(message, beforeSend, success, complete) {
             alert('添加留言信息失败！')
         },
         complete: complete
-    })
-}
-
-
-function login(code, success) {
-    requests({
-        url: 'api/login',
-        type: 'POST',
-        data: JSON.stringify({ code }),
-        success: success,
-        error: function(err) {
-            alert('登陆失败，服务器错误！')
-        }
     })
 }

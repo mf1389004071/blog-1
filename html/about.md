@@ -24,20 +24,23 @@
 
 ### 联系方式
 
-QQ: 81085036
+QQ:     81085036
 
-email: guanquanhong@163.com
+email:  guanquanhong@163.com
 
 github: [https://github.com/miiiku](https://github.com/miiiku)
 
-weibo: [https://weibo.com/u/5561168966](https://weibo.com/u/5561168966)
+weibo:  [https://weibo.com/u/5561168966](https://weibo.com/u/5561168966)
+
+twitter:[https://twitter.com/XHU2NzRm](https://twitter.com/XHU2NzRm)
 
 ### 更新日志
 
 * 2016-12-28 修改博客风格为hexo默认主题风格
 * 2017-02-28 移除博客富文本编辑器，文章采用markdown语法编辑和显示
-* 2017-07-10 添加留言回复功能，留言加载功能，取消文章等级制度，添加在线编辑markdown页面，方便用来添加/编辑文章([在线编辑markdown](/markdown.html))。
+* 2017-07-10 添加留言回复功能，留言加载功能，取消文章权限制度，添加在线编辑markdown页面(https://miiiku.xyz/markdown.html)
 * 2017-08-30 优化手机端显示效果，页面头部微改
 * 2017-12-25 一些样式改动和项目代码优化
+* 2018-03-13 修复了一些BUG，修改页面加载loading，标签样式小更新，留言头像使用Gravatar
 
 > 该页面最后编辑于2018-03-05

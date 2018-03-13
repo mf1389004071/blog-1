@@ -4,7 +4,8 @@ querystring     = require('querystring'),       // 参数处理模块
 express         = require('express'),           // express 框架
 moment          = require('moment'),            // 时间格式化
 model           = require('../mongoose/model'), // 数据库模型
-email           = require('../module/email');   // 发送邮件
+email           = require('../module/email'),   // 发送邮件
+utils 			= require('../module/utils'); 	// 工具
 
 var router 		= express.Router();
 
@@ -24,7 +25,7 @@ router.get('/message/page/:page', function(req, res) {
 
 	var asyncReply = async function formatReply (messages) {
 		for(let item of messages) {
-			item.avatar = getAvatar(item.qq);
+			item.avatar = utils.getAvatar(item.email);
 			item.time = moment(item.datetime).format('YYYY-MM-DD HH:mm:ss');
 			item = item.replyid ? await loadReply(item) : item
 		}
@@ -46,13 +47,13 @@ router.post('/message/add', function(req, res) {
 	
 	var user = {
 		nickname: message.nickname,
-		avatar: message.avatar,
+		email: message.email,
 		link: message.link
 	}
 
 	var creatMessage = new model.Message({
 		nickname: message.nickname,
-		qq: message.avatar,
+		email: message.email,
 		link: message.link,
 		content: message.content,
 		replyid: message.replyid,
@@ -71,7 +72,7 @@ router.post('/message/add', function(req, res) {
 	}
 
 	var asyncReply = async function formatReply (messages) {
-		messages.avatar = getAvatar(messages.qq);
+		messages.avatar = utils.getAvatar(messages.email);
 		messages.time = moment(messages.datetime).format('YYYY-MM-DD HH:mm:ss');
 
 		messages = messages.replyid ? await loadReply(messages) : messages
@@ -98,10 +99,5 @@ router.post('/message/add', function(req, res) {
 		asyncReply(messageUpdate)
 	})
 })
-
-// 返回QQ头像
-function getAvatar(QQ) {
-	return '//q1.qlogo.cn/g?b=qq&nk=' + QQ + '&s=100&t=' + new Date().getTime()
-}
 
 module.exports = router

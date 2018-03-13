@@ -5,7 +5,8 @@ express         = require('express'),           // express 框架
 marked          = require('marked'),            // 解析markdown文件
 moment          = require('moment'),            // 时间格式化
 model           = require('../mongoose/model'), // 数据库模型
-email           = require('../module/email');   // 发送邮件
+email           = require('../module/email'),   // 发送邮件
+utils 			= require('../module/utils'); 	// 工具
 
 var router 		= express.Router();
 
@@ -18,7 +19,7 @@ function fetchArticle(param, page, url, success, error) {
 		var promise = new Promise(function(resolve, reject) {
 			model.Article.count(param, (err, count) => {
 				if(err) reject(err)
-				let HTMLPage = createPage(page, count, url)
+				let HTMLPage = utils.createPage(page, count, url)
 				resolve({ HTMLPage })
 			})
 		})
@@ -40,7 +41,7 @@ function fetchArticle(param, page, url, success, error) {
 
 	Promise.all([getCount(), getArticle()])
 	.then(function(resolve) {
-		GetCommon(result => {
+		utils.GetCommon(result => {
 			let data = result
 			resolve.forEach(function(item, index) { data = Object.assign(data, item) })
 			success && success(data)
@@ -168,7 +169,7 @@ router.get('/article/:_id', function(req, res) {
 	incArticle()
 	.then(getArticle)
 	.then(function(resolve) {
-		GetCommon(result => {
+		utils.GetCommon(result => {
 			result.article = resolve
 			res.render('page/article', result)
 		})
@@ -182,7 +183,7 @@ router.get('/article/:_id', function(req, res) {
 router.get('/articles', function(req, res) {
 	model.Article.fetchTime(function(err, articles) {
 		if(err) return res.end(err)
-		GetCommon(result => {
+		utils.GetCommon(result => {
 			result.meta_title = "归档 - " + result.title
 			result.articles = articles
 			res.render('page/articles', result)
@@ -209,7 +210,7 @@ router.get('/links', function(req, res) {
 			links[item] = await loadLink(item)
 		}
 
-		GetCommon(result => {
+		utils.GetCommon(result => {
 			result.meta_title = '友链 - ' + result.title
 			result.links = links
 			res.render('page/link', result)
@@ -221,7 +222,7 @@ router.get('/links', function(req, res) {
 
 // about page
 router.get('/about', function(req, res) {
-	GetCommon(result => {
+	utils.GetCommon(result => {
 		let about = marked(fs.readFileSync('./html/about.md', 'utf8'));
 		result.meta_title = '关于 - ' + result.title
 		result.html = about
@@ -238,7 +239,7 @@ router.get('/message', function(req, res) {
 		var cookieUser = req.cookies.user
 		user = {
 			nickname: cookieUser.nickname,
-			avatar: cookieUser.avatar,
+			email: cookieUser.email,
 			link: cookieUser.link
 		}
 	}
@@ -256,7 +257,7 @@ router.get('/message', function(req, res) {
 
 	var asyncReply = async function formatReply (messages) {
 		for(let item of messages) {
-			item.avatar = getAvatar(item.qq);
+			item.avatar = utils.getAvatar(item.email);
 			item.time = moment(item.datetime).format('YYYY-MM-DD HH:mm:ss');
 
 			if(item.replyid) {
@@ -267,7 +268,7 @@ router.get('/message', function(req, res) {
 			}
 		}
 
-		GetCommon(result => {
+		utils.GetCommon(result => {
 			result.meta_title = '留言 - ' + result.title
 			result.messages = messages
 			result.user = user
@@ -299,7 +300,7 @@ router.get('/message/page/:page', function(req, res) {
 			// 处理头像
 			var messageslength = messages.length;
 			messages.forEach(function(item, index) {
-				item.avatar = getAvatar(item.qq);
+				item.avatar = utils.getAvatar(item.email);
 				item.time = moment(item.datetime).format('YYYY-MM-DD HH:mm:ss');
 				if(item.replyid) {
 					model.Message.fetchById(item.replyid, function(err, message) {
@@ -347,7 +348,7 @@ router.post('/message/add', function(req, res) {
 
 	var newMessage = new model.Message({
 		nickname: data.nickname,
-		qq: data.avatar,
+		email: data.avatar,
 		link: data.link,
 		content: data.content,
 		state: 0,
@@ -358,7 +359,7 @@ router.post('/message/add', function(req, res) {
 		if(err) console.log(err);
 		if(messageUpdate) {
 			messageUpdate.time = moment(messageUpdate.datetime).format('YYYY-MM-DD HH:mm:ss')
-			messageUpdate.avatar = getAvatar(messageUpdate.qq);
+			messageUpdate.avatar = utils.getAvatar(messageUpdate.email);
 
 			var option = {
 				sendee: '81085036@qq.com',
@@ -395,119 +396,5 @@ router.get('/musiclist', function(req, res) {
 })
 
 
-// 设置分页
-function createPage(page, countNumber, url) {
-
-	if(typeof page != 'number') page = Number(page)
-
-	var countPage = Math.ceil(countNumber / pageNumber)
-
-	if(countPage <= 1) countPage = 1;
-
-	var first = '', numberPageL = '', numberPage = '', numberPageR = '', last = '';
-
-	first = "<li><a type='ajax_a' href='" + url + "/page/1'>first</a></li>"
-
-	last = "<li><a type='ajax_a' href='" + url + "/page/" + countPage + "'>last</a></li>"
-
-	for(var i = pageOffSet; i >= 1; i--) {
-		var tempNumberL = page - i
-		if(tempNumberL < 1) continue
-		numberPageL += "<li><a type='ajax_a' href='" + url + "/page/"+ tempNumberL +"' data-page='" + tempNumberL + "'>" + tempNumberL + "</a></li>"
-	}
-
-	numberPage = "<li><a href='javascript:;' class='active'>" + page + "</a></li>"
-
-	for(var i = 1; i <= pageOffSet; i++) {
-		var tempNumberR = page + i
-		if(tempNumberR > countPage) continue
-		numberPageR += "<li><a type='ajax_a' href='" + url + "/page/" + tempNumberR + "'>" + tempNumberR + "</a></li>"
-	}
-
-	return "<ul class='page-content'>" + first + numberPageL + numberPage + numberPageR + last + "</ul>";
-}
-
-function GetBlogInfo() {
-	var promise = new Promise(function(resolve, reject){
-		model.Config.fetchInfo(function(err, info) {
-			if(err) reject(err);
-	
-			resolve({
-				title: info.title,
-				description: info.description
-			});
-		})
-	})
-
-	return promise;
-}
-
-function GetBlogMeta() {
-	var promise = new Promise(function(resolve, reject){
-		model.Config.fetchMeta(function(err, meta) {
-			if(err) reject(err);
-	
-			resolve({
-				meta_keywords: meta.meta_keywords,
-				meta_description: meta.meta_description
-			});
-		})
-	})
-
-	return promise;
-}
-
-function GetGroupNav() {
-	var promise = new Promise(function(resolve, reject){
-		model.Article.groupNav(function(err, navs) {
-			if(err) reject(err);
-			resolve({ navs });
-		})
-	})
-
-	return promise;
-}
-
-function GetGroupTags() {
-	var promise = new Promise(function(resolve, reject){
-		model.Article.groupTags(function(err, tags) {
-			if(err) reject(err);
-			resolve({ tags })
-		})
-	})
-
-	return promise;
-}
-
-function GetRandomMotto() {
-	var promise = new Promise(function(resolve, reject){
-		model.Motto.fetchAll(function(err, mottos) {
-			if(err) reject(err)
-			var random = Math.floor(Math.random() * mottos.length)
-			var motto = mottos[random].motto
-			resolve({motto})
-		})
-	})
-	return promise;
-}
-
-// 获取博客的通用数据
-function GetCommon(callback) {
-	Promise.all([GetBlogInfo({}), GetBlogMeta({}), GetGroupNav({}), GetGroupTags({}), GetRandomMotto({})])
-	.then(function(resolve) {
-		var d = {}
-		for(let item of resolve) { d = Object.assign(d, item) }
-		callback && callback(d)
-	})
-	.catch(function(reject) {
-		console.log(reject)
-	})
-}
-
-// 返回QQ头像
-function getAvatar(QQ) {
-	return '//q1.qlogo.cn/g?b=qq&nk=' + QQ + '&s=100&t=' + new Date().getTime()
-}
 
 module.exports = router
-module.exports.GetCommon = GetCommon
