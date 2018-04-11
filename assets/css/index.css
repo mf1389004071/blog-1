@@ -282,6 +282,31 @@ ul, li {
   margin: 1.6em 20px 1.6em 20px;
   line-height: 1.6em;
 }
+    
+.markdownInfo table {
+  display: block;
+  width: 100%;
+  overflow: auto;
+}
+
+.markdownInfo table th {
+  font-weight: bold;
+}
+
+.markdownInfo table th,
+.markdownInfo table td {
+  padding: 6px 13px;
+  border: 1px solid #ddd;
+}
+
+.markdownInfo table tr {
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+}
+
+.markdownInfo table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
 
 .markdownInfo video, .markdownInfo embed {
   display: block;

@@ -123,16 +123,40 @@ function initMusic() {
             "pic": "https://p1.music.126.net/GYWkXtrnAawOWO2nfLg3PA==/109951163028865726.jpg?param=120y120"
         },
         {
-            "title": "my sweetest one",
-            "author": "Aimer",
-            "url": "/music/Aimer - my sweetest one.mp3",
-            "pic": "https://p1.music.126.net/3Ciybc8XThOMUKyin_RXUw==/6646547791171244.jpg?param=120y120"
-        },
-        {
             "title": "銀色飛行船",
             "author": "Supercell",
             "url": "/music/Supercell - 銀色飛行船.mp3",
             "pic": "https://p1.music.126.net/0gJSRbh0TE30OtnDebHmeA==/5839506255164737.jpg?param=120y120"
+		},
+        {
+            "title": "夢追人",
+            "author": "KOKIA",
+            "url": "/music/KOKIA - 夢追人.mp3",
+            "pic": "https://p1.music.126.net/3t5JIxQKohR5gk_cZqjLGw==/2275989069517444.jpg?param=120y120"
+        },
+        {
+            "title": "TRAIN",
+            "author": "ONE☆DRAFT",
+            "url": "/music/ONE☆DRAFT - TRAIN.mp3",
+            "pic": "https://p1.music.126.net/Tet19RIOsn_ouka8v9GMbw==/916992697608061.jpg?param=120y120"
+        },
+        {
+            "title": "小さな恋のうた",
+            "author": "ダイアナ・ガーネット",
+            "url": "/music/ダイアナ・ガーネット - 小さな恋のうた.mp3",
+            "pic": "https://p1.music.126.net/Iw6fszahMzjO7ShPmk0THA==/5648191232016535.jpg?param=120y120"
+        },
+        {
+            "title": "Everyday Love",
+            "author": "少女时代",
+            "url": "/music/少女时代 - Everyday Love.mp3",
+            "pic": "https://p1.music.126.net/-DZrXSJuP5nC2W3YSJb5Lw==/5788928720322741.jpg?param=120y120"
+        },
+        {
+            "title": "明日晴れるかな",
+            "author": "桑田佳祐",
+            "url": "/music/桑田佳祐 - 明日晴れるかな.mp3",
+            "pic": "https://p1.music.126.net/hKAMn29IQksdDQs5PI3m5w==/2490393836938087.jpg?param=120y120"
         }
     ]
 

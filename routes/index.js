@@ -1,42 +1,33 @@
-var
-fs              = require('fs'),                // 文件操作模块
-querystring     = require('querystring'),       // 参数处理模块
-express         = require('express'),           // express 框架
-marked          = require('marked'),            // 解析markdown文件
-moment          = require('moment'),            // 时间格式化
-model           = require('../mongoose/model'), // 数据库模型
-email           = require('../module/email'),   // 发送邮件
-utils 			= require('../module/utils'); 	// 工具
+const fs            = require('fs')              // 文件操作模块
+const querystring   = require('querystring')     // 参数处理模块
+const express       = require('express')         // express 框架
+const marked        = require('marked')          // 解析markdown文件
+const email         = require('../module/email') // 发送邮件
+const utils 		= require('../module/utils') // 工具
+const { Article, Link, Message } = require('../module/db') // 数据库模型
 
-var router 		= express.Router();
+var router 			= express.Router()
 
-global.pageNumber	= 5 						// 前台分页条数
-global.pageOffSet 	= 2 						// 页码偏移量
-
-function fetchArticle(param, page, url, success, error) {
-
+function fetchArticle(param, url, success, error) {
 	var getCount = function () {
-		var promise = new Promise(function(resolve, reject) {
-			model.Article.count(param, (err, count) => {
+		return new Promise(function(resolve, reject) {
+			Article.count(param, (err, count) => {
 				if(err) reject(err)
-				let HTMLPage = utils.createPage(page, count, url)
+				let HTMLPage = utils.createPage(param.page, count, url)
 				resolve({ HTMLPage })
 			})
 		})
-
-		return promise
 	}
 
 	var getArticle = function() {
-		var promise = new Promise(function(resolve, reject){
-			model.Article.fetch(param, page, (err, articles) => {
+		return new Promise(function(resolve, reject){
+			Article.fetch(param, (err, articles) => {
 				if(err) reject(err)
-				articles.forEach(function(item, index) { item.time = moment(item.datetime).format('YYYY-MM-DD') })
+				articles = JSON.parse(JSON.stringify(articles))
+				articles.forEach(function(item, index) { item.datetime = moment(item.datetime).format('YYYY-MM-DD') })
 				resolve({ articles })
 			})
 		})
-
-		return promise
 	}
 
 	Promise.all([getCount(), getArticle()])
@@ -52,58 +43,51 @@ function fetchArticle(param, page, url, success, error) {
 
 // index page
 router.get('/', function(req, res) {
-	let page = 1
-
-	fetchArticle({}, page, '', data => {
+	fetchArticle({ page: 1 }, '', data => {
 		res.render('page/index', data)
 	}, error => {
-		res.send(error)
+		console.log(error)
 	})
 })
 
 router.get('/page/:page', function(req, res) {
-	let page = req.params.page
-	
-	fetchArticle({}, page, '', data => {
+	fetchArticle({ page: req.params.page }, '', data => {
 		res.render('page/index', data)
 	}, error => {
-		res.send(error)
+		console.log(error)
 	})
 })
 
 // category articlelist
 router.get('/category/:type', function(req, res) {
-	let type = req.params.type
-	let page = 1
+	var type = req.params.type
 	
-	fetchArticle({ type }, page, '/category/' + type, data => {
+	fetchArticle({ type, page: 1 }, '/category/' + type, data => {
 		res.render('page/index', data)
 	}, error => {
-		res.send(error)
+		console.log(error)
 	})
 	
 })
 
 router.get('/category/:type/page/:page', function(req, res) {
-	let type = req.params.type
-	let page = req.params.page
+	var type = req.params.type
+	var page = req.params.page
 	
-	fetchArticle({ type }, page, '/category/' + type, data => {
+	fetchArticle({ type, page }, '/category/' + type, data => {
 		res.render('page/index', data)
 	}, error => {
-		res.send(error)
+		console.log(error)
 	})
 })
 
 // tag articlelist
 router.get('/tag/:tag', function(req, res) {
-	let tag = req.params.tag
-	let page = 1
-	
-	fetchArticle({ tag }, page, '/tag/' + tag, data => {
+	var tag = req.params.tag
+	fetchArticle({ tag, page: 1 }, '/tag/' + tag, data => {
 		res.render('page/index', data)
 	}, error => {
-		res.send(error)
+		console.log(error)
 	})
 })
 
@@ -111,34 +95,33 @@ router.get('/tag/:tag/page/:page', function(req, res) {
 	let tag = req.params.tag
 	let page = req.params.page
 	
-	fetchArticle({ tag }, page, '/tag/' + tag, data => {
+	fetchArticle({ tag, page }, '/tag/' + tag, data => {
 		res.render('page/index', data)
 	}, error => {
-		res.send(error)
+		console.log(error)
 	})
 })
 
 // index search
 router.get('/search/:keyword', function(req, res) {
 	let keyword = req.params.keyword
-	let page = 1
 	
-	fetchArticle({ keyword }, page, '/search/' + keyword, data => {
+	fetchArticle({ keyword, page: 1 }, '/search/' + keyword, data => {
 		data.meta_title = keyword + ' - ' + data.title
 		res.render('page/index', data)
 	}, error => {
-		res.send(error)
+		console.log(error)
 	})
 })
 
 router.get('/search/:keyword/page/:page', function(req, res) {
 	let keyword = req.params.keyword
-	let page = 1
+	let page = req.params.page
 	
-	fetchArticle({ keyword }, page, '/search/' + search, data => {
+	fetchArticle({ keyword, page }, '/search/' + search, data => {
 		res.render('page/index', data)
 	}, error => {
-		res.send(error)
+		console.log(error)
 	})
 })
 
@@ -148,7 +131,7 @@ router.get('/article/:_id', function(req, res) {
 
 	let incArticle = function() {
 		return new Promise(function(resolve, reject) {
-			model.Article.inc(id, (err, article) => {
+			Article.inc(id, (err, article) => {
 				if(err) reject(err)
 				resolve()
 			})
@@ -157,9 +140,10 @@ router.get('/article/:_id', function(req, res) {
 
 	let getArticle = function() {
 		return new Promise(function(resolve, reject) {
-			model.Article.findById(id, (err, article) => {
+			Article.findById(id, (err, article) => {
 				if(err) reject(err)
-				article.date = moment(article.datetime).format('YYYY-MM-DD')
+				article = JSON.parse(JSON.stringify(article))
+				article.datetime = moment(article.datetime).format('YYYY-MM-DD')
 				article.html = marked(article.content)
 				resolve(article)
 			})
@@ -181,7 +165,7 @@ router.get('/article/:_id', function(req, res) {
 
 // articles page
 router.get('/articles', function(req, res) {
-	model.Article.fetchTime(function(err, articles) {
+	Article.fetchTime(function(err, articles) {
 		if(err) return res.end(err)
 		utils.GetCommon(result => {
 			result.meta_title = "归档 - " + result.title
@@ -197,7 +181,7 @@ router.get('/links', function(req, res) {
 
 	var loadLink = function(type) {
 		return new Promise(function(resolve, reject) {
-			model.Link.fetchAll(type, '1', (err, links) => {
+			Link.fetchAuth(type, (err, links) => {
 				if(err) reject(err)
 				resolve(links)
 			})
@@ -232,8 +216,7 @@ router.get('/about', function(req, res) {
 
 // message page
 router.get('/message', function(req, res) {
-	let page = 1
-	let user = {}
+	var user = {}
 
 	if(req.cookies.user) {
 		var cookieUser = req.cookies.user
@@ -246,7 +229,7 @@ router.get('/message', function(req, res) {
 
 	var loadReply = function(message) {
 		return new Promise(function(resolve, reject) {
-			model.Message.fetchById(message.replyid, (err, replyMessage) => {
+			Message.fetchById(message.replyid, (err, replyMessage) => {
 				if(err) reject(err)
 				message.replyname = replyMessage.nickname
 				message.replycontent = replyMessage.content
@@ -256,9 +239,10 @@ router.get('/message', function(req, res) {
 	}
 
 	var asyncReply = async function formatReply (messages) {
+		var messages = JSON.parse(JSON.stringify(messages))
 		for(let item of messages) {
-			item.avatar = utils.getAvatar(item.email);
-			item.time = moment(item.datetime).format('YYYY-MM-DD HH:mm:ss');
+			item.avatar = utils.getAvatar(item.email)
+			item.datetime = moment(item.datetime).format('YYYY-MM-DD HH:mm:ss')
 
 			if(item.replyid) {
 				item = await loadReply(item)
@@ -276,58 +260,9 @@ router.get('/message', function(req, res) {
 		})
 	}
 
-	model.Message.fetch(null, 1, page, function(err, messages) {
+	Message.fetch({ state: true, page: 1 }, function(err, messages) {
 		if(err) return res.send(err)
 		asyncReply(messages)
-	})
-})
-
-// message pagenumber
-router.get('/message/page/:page', function(req, res) {
-	let page = req.params.page;
-
-	model.Message.fetch(null, 1, page, pageNumber, function(err, messages) {
-		if(err) {
-            console.log(err)
-            res.send(err)
-		}
-		if(messages) {
-            if(messages.length < 1) {
-                res.send("");
-                return;
-            }
-
-			// 处理头像
-			var messageslength = messages.length;
-			messages.forEach(function(item, index) {
-				item.avatar = utils.getAvatar(item.email);
-				item.time = moment(item.datetime).format('YYYY-MM-DD HH:mm:ss');
-				if(item.replyid) {
-					model.Message.fetchById(item.replyid, function(err, message) {
-						messageslength --;
-						if(err) console.log(err)
-						if(message) {
-							item.replyname = message.nickname;
-							item.replycontent = message.content;
-						}
-						if(messageslength <= 0) {
-                            res.render('part/addMessage', {
-                                data: messages
-                            })
-						}
-					})
-				}else {
-					messageslength --;
-					item.replyname = '';
-					item.replycontent = '';
-					if(messageslength <= 0) {
-                        res.render('part/addMessage', {
-                            data: messages
-                        })
-					}
-				}
-			})
-        }
 	})
 })
 
@@ -346,7 +281,7 @@ router.post('/message/add', function(req, res) {
 
 	res.cookie('wzzlUser', cookieUser, { maxAge: 1000 * 60 * 60 * 24 *30, httpOnly: true })
 
-	var newMessage = new model.Message({
+	var newMessage = new Message({
 		nickname: data.nickname,
 		email: data.avatar,
 		link: data.link,
@@ -370,7 +305,7 @@ router.post('/message/add', function(req, res) {
 			email.sendEmail(option);
 
 			if(data.replyid) {
-				model.Message.fetchById(messageUpdate.replyid, function(err, message) {
+				Message.fetchById(messageUpdate.replyid, function(err, message) {
 					if(err) console.log(err)
 					if(message) {
 						messageUpdate.replyname = message.nickname;
@@ -384,17 +319,6 @@ router.post('/message/add', function(req, res) {
 		}
 	})
 })
-
-// 返回playlist
-router.get('/musiclist', function(req, res) {
-	let resultJSON = JSON.parse(fs.readFileSync('./html/musiclist.json'))
-	if(resultJSON) {
-		res.send(resultJSON)
-	}else {
-		res.send('')
-	}
-})
-
 
 
 module.exports = router

@@ -1,6 +1,5 @@
-var
-model           = require('../mongoose/model'), // 数据库模型
-gravatar 		= require('gravatar'); 			// gravatar头像
+const { Article, Motto, Setting } = require('./db') // 数据库模型
+const gravatar = require('gravatar') // gravatar头像
 
 // 设置分页
 function createPage(page, countNumber, url) {
@@ -35,72 +34,51 @@ function createPage(page, countNumber, url) {
 }
 
 function GetBlogInfo() {
-	var promise = new Promise(function(resolve, reject){
-		model.Config.fetchInfo(function(err, info) {
+	return new Promise(function(resolve, reject){
+		Setting.fetchInfo(function(err, info) {
 			if(err) reject(err);
-	
 			resolve({
 				title: info.title,
-				description: info.description
-			});
+				description: info.description,
+				meta_keywords: info.meta_keywords,
+				meta_description: info.meta_description,
+			})
 		})
 	})
-
-	return promise;
 }
 
-function GetBlogMeta() {
-	var promise = new Promise(function(resolve, reject){
-		model.Config.fetchMeta(function(err, meta) {
-			if(err) reject(err);
-	
-			resolve({
-				meta_keywords: meta.meta_keywords,
-				meta_description: meta.meta_description
-			});
+function GetArticleTypes() {
+	return new Promise(function(resolve, reject){
+		Article.fetchType(function(err, navs) {
+			if(err) reject(err)
+			resolve({ navs })
 		})
 	})
-
-	return promise;
 }
 
-function GetGroupNav() {
-	var promise = new Promise(function(resolve, reject){
-		model.Article.groupNav(function(err, navs) {
-			if(err) reject(err);
-			resolve({ navs });
-		})
-	})
-
-	return promise;
-}
-
-function GetGroupTags() {
-	var promise = new Promise(function(resolve, reject){
-		model.Article.groupTags(function(err, tags) {
-			if(err) reject(err);
+function GetArticleTags() {
+	return new Promise(function(resolve, reject){
+		Article.fetchTags(function(err, tags) {
+			if(err) reject(err)
 			resolve({ tags })
 		})
 	})
-
-	return promise;
 }
 
 function GetRandomMotto() {
-	var promise = new Promise(function(resolve, reject){
-		model.Motto.fetchAll(function(err, mottos) {
+	return new Promise(function(resolve, reject){
+		Motto.fetchAll(function(err, mottos) {
 			if(err) reject(err)
 			var random = Math.floor(Math.random() * mottos.length)
 			var motto = mottos[random].motto
 			resolve({motto})
 		})
 	})
-	return promise;
 }
 
 // 获取博客的通用数据
 function GetCommon(callback) {
-	Promise.all([GetBlogInfo({}), GetBlogMeta({}), GetGroupNav({}), GetGroupTags({}), GetRandomMotto({})])
+	Promise.all([GetBlogInfo({}), GetArticleTypes({}), GetArticleTags({}), GetRandomMotto({})])
 	.then(function(resolve) {
 		var d = {}
 		for(let item of resolve) { d = Object.assign(d, item) }
@@ -115,6 +93,5 @@ function GetCommon(callback) {
 function getAvatar(email) {
 	return gravatar.url(email, {s: '200', r: 'g', d: 'retro'}, true)
 }
-
 
 module.exports = { createPage, GetCommon, getAvatar }

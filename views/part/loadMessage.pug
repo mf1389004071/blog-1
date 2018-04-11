@@ -14,5 +14,5 @@ each item in data
                 .comment_text
                     p #{item.content}
                 .comment_other
-                    small #{item.time}
+                    small #{item.datetime}
                     a(href='javascript:;', data-id=item._id, data-nickname=item.nickname onclick='replyMessage(this)') 回复

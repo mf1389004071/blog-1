@@ -1,20 +1,18 @@
-var
-fs              = require('fs'),                // 文件操作模块
-querystring     = require('querystring'),       // 参数处理模块
-express         = require('express'),           // express 框架
-moment          = require('moment'),            // 时间格式化
-model           = require('../mongoose/model'), // 数据库模型
-email           = require('../module/email'),   // 发送邮件
-utils 			= require('../module/utils'); 	// 工具
+const fs            = require('fs')               	// 文件操作模块
+const querystring   = require('querystring')      	// 参数处理模块
+const express       = require('express')          	// express 框架
+const email         = require('../module/email')  	// 发送邮件
+const utils 		= require('../module/utils')	// 工具
+const { Message } 	= require('../module/db')		// 数据库模型
 
-var router 		= express.Router();
+var router 			= express.Router()
 
 router.get('/message/page/:page', function(req, res) {
-	let page = req.params.page;
+	var page = req.params.page
 
 	var loadReply = function(message) {
 		return new Promise(function(resolve, reject) {
-			model.Message.fetchById(message.replyid, (err, replyMessage) => {
+			Message.fetchById(message.replyid, (err, replyMessage) => {
 				if(err) reject(err)
 				message.replyname = replyMessage.nickname
 				message.replycontent = replyMessage.content
@@ -24,16 +22,17 @@ router.get('/message/page/:page', function(req, res) {
 	}
 
 	var asyncReply = async function formatReply (messages) {
+		var messages = JSON.parse(JSON.stringify(messages))
 		for(let item of messages) {
-			item.avatar = utils.getAvatar(item.email);
-			item.time = moment(item.datetime).format('YYYY-MM-DD HH:mm:ss');
+			item.avatar = utils.getAvatar(item.email)
+			item.datetime = moment(item.datetime).format('YYYY-MM-DD HH:mm:ss')
 			item = item.replyid ? await loadReply(item) : item
 		}
 		
 		res.render('part/loadMessage', { data: messages })
 	}
 
-	model.Message.fetch(null, 1, page, function(err, messages) {
+	Message.fetch({ state: true, page }, function(err, messages) {
         if(err) return res.send(err)
         if(!messages || messages.length < 1) return res.send(null)
 		asyncReply(messages)
@@ -51,18 +50,9 @@ router.post('/message/add', function(req, res) {
 		link: message.link
 	}
 
-	var creatMessage = new model.Message({
-		nickname: message.nickname,
-		email: message.email,
-		link: message.link,
-		content: message.content,
-		replyid: message.replyid,
-		state: 0
-	})
-
 	var loadReply = function(message) {
 		return new Promise(function(resolve, reject) {
-			model.Message.fetchById(message.replyid, (err, replyMessage) => {
+			Message.fetchById(message.replyid, (err, replyMessage) => {
 				if(err) reject(err)
 				message.replyname = replyMessage.nickname
 				message.replycontent = replyMessage.content
@@ -82,9 +72,8 @@ router.post('/message/add', function(req, res) {
 
 	res.cookie('user', user, { maxAge: 1000 * 60 * 60 * 24 *30, httpOnly: true })
 
-	creatMessage.save(function(err, messageUpdate) {
+	new Message(message).save(function(err, messageUpdate) {
 		if(err) res.send(err)
-
 		email.sendEmail({
 			sendee: '81085036@qq.com',
 			subject: '《我在这里 - 有新的留言》',
@@ -95,7 +84,6 @@ router.post('/message/add', function(req, res) {
 				<p>留言时间	：${messageUpdate.datetime}</p>
 			`
 		})
-
 		asyncReply(messageUpdate)
 	})
 })

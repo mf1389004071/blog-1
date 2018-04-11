@@ -14,6 +14,8 @@
 
 目前这个博客是自己写的，纠结过是否使用*wordpress*, *typecho*, *hexo*但是因为种种原因都否决了，于是就自己写了一个，但是很多功能都不完善，比如兼容性·博客的一些管理·留言等等做的都不好，只能说凑合用叭= =
 
+博客后台使用*react* + *Ant Design* ~~其实是用来练手的(雾~~
+
 关于友链~ 需要交换友链的可以在留言板给我留言，看到后会加上的！
 
 整个博客搭建使用的是 nodejs + express， 数据库用的是mongodb(遇到了很多的坑！)
@@ -23,16 +25,13 @@
 偶然有一天玩了玩hexo 发现hexo的默认主题挺好看的，再加上我最开始的风格有小伙伴吐槽给人一种扣扣空间的感觉 ORZ~ 然后就改成现在这样了！
 
 ### 联系方式
+| types     | Are      |
+|-----------|:-------------:|
+| email     | guanquanhong@163.com |
+| github    | [https://github.com/miiiku](https://github.com/miiiku)   |
+| weibo     | [https://weibo.com/u/5561168966](https://weibo.com/u/5561168966) |
+| twitter   | [https://twitter.com/XHU2NzRm](https://twitter.com/XHU2NzRm) |
 
-QQ:     81085036
-
-email:  guanquanhong@163.com
-
-github: [https://github.com/miiiku](https://github.com/miiiku)
-
-weibo:  [https://weibo.com/u/5561168966](https://weibo.com/u/5561168966)
-
-twitter:[https://twitter.com/XHU2NzRm](https://twitter.com/XHU2NzRm)
 
 ### 更新日志
 
@@ -43,4 +42,4 @@ twitter:[https://twitter.com/XHU2NzRm](https://twitter.com/XHU2NzRm)
 * 2017-12-25 一些样式改动和项目代码优化
 * 2018-03-13 修复了一些BUG，修改页面加载loading，标签样式小更新，留言头像使用Gravatar
 
-> 该页面最后编辑于2018-03-05
+> 该页面最后编辑于2018-04-11

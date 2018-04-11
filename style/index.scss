@@ -277,7 +277,32 @@ $TRANSITION: all 0.3s ease;
 	ul,ol,dl {
 		margin: 1.6em 20px 1.6em 20px;
 		line-height: 1.6em;
-	}
+    }
+    
+    table {
+        display: block;
+        width: 100%;
+        overflow: auto;
+    }
+    
+    table th {
+        font-weight: bold;
+    }
+    
+    table th,
+    table td {
+        padding: 6px 13px;
+        border: 1px solid #ddd;
+    }
+    
+    table tr {
+        background-color: #fff;
+        border-top: 1px solid #ccc;
+    }
+    
+    table tr:nth-child(2n) {
+        background-color: #f8f8f8;
+    }
 
 	video,embed {
 		display: block;

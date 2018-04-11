@@ -1,6 +1,3 @@
-
-
-
 // load plugins
 var del 	= require('del')
 var gulp 	= require('gulp')
