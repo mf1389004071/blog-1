@@ -7,7 +7,7 @@ var transporter = nodemailer.createTransport({
     requireTLS: true,
     auth: {
         user: 'guanquanhong@outlook.com',
-        pass: 'xxxxxxxx'
+        pass: 'xxxxxx',
     }
 })
 
@@ -18,7 +18,7 @@ function sendEmail(options) {
 	    to: options.sendee, 							    // 收件地址，可以多个
 	    subject: options.subject, 						    // 标题
 	    text: options.text, 							    // plaintext body
-	    html: options.html			 					    // html body
+	    html: options.html,			 					    // html body
 	}
 
 	// 发送带有定义的传输对象的邮件

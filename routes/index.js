@@ -266,59 +266,5 @@ router.get('/message', function(req, res) {
 	})
 })
 
-// insert message
-router.post('/message/add', function(req, res) {
-	// req.query 获取的是url ？号后面的参数
-	var data = req.body.data;
-	// 获取到的数据是url字符串 需要转换为对象
-	data = querystring.parse(data)
-	if(data.link.indexOf('http') < 0 && data.link != '') data.link = 'http://' + data.link
-	var cookieUser = {
-		nickname: data.nickname,
-		avatar: data.avatar,
-		link: data.link
-	}
-
-	res.cookie('wzzlUser', cookieUser, { maxAge: 1000 * 60 * 60 * 24 *30, httpOnly: true })
-
-	var newMessage = new Message({
-		nickname: data.nickname,
-		email: data.avatar,
-		link: data.link,
-		content: data.content,
-		state: 0,
-		replyid: data.replyid
-	})
-
-	newMessage.save(function(err, messageUpdate) {
-		if(err) console.log(err);
-		if(messageUpdate) {
-			messageUpdate.time = moment(messageUpdate.datetime).format('YYYY-MM-DD HH:mm:ss')
-			messageUpdate.avatar = utils.getAvatar(messageUpdate.email);
-
-			var option = {
-				sendee: '81085036@qq.com',
-				subject: '《我在这里》 有新的留言， 请注意查收！',
-				text: '有新的留言！',
-				html: '<p>留言人:' + messageUpdate.nickname + '</p><p>留言内容：' + messageUpdate.content + '</p><p>留言时间：' + messageUpdate.datetime + '</p>'
-			}
-			email.sendEmail(option);
-
-			if(data.replyid) {
-				Message.fetchById(messageUpdate.replyid, function(err, message) {
-					if(err) console.log(err)
-					if(message) {
-						messageUpdate.replyname = message.nickname;
-						messageUpdate.replycontent = message.content;
-						res.render('part/newMessage', { data: messageUpdate });
-					}
-				})
-			}else {
-				res.render('part/newMessage', { data: messageUpdate });
-			}
-		}
-	})
-})
-
 
 module.exports = router

@@ -62,18 +62,19 @@ router.post('/message/add', function(req, res) {
 	}
 
 	var asyncReply = async function formatReply (messages) {
-		messages.avatar = utils.getAvatar(messages.email);
-		messages.time = moment(messages.datetime).format('YYYY-MM-DD HH:mm:ss');
+		messages.avatar = utils.getAvatar(messages.email)
 
 		messages = messages.replyid ? await loadReply(messages) : messages
 		
-		res.render('part/creatMessage', { data: messages });
+		res.render('part/creatMessage', { data: messages })
 	}
 
 	res.cookie('user', user, { maxAge: 1000 * 60 * 60 * 24 *30, httpOnly: true })
 
 	new Message(message).save(function(err, messageUpdate) {
 		if(err) res.send(err)
+		messageUpdate = JSON.parse(JSON.stringify(messageUpdate))
+		messageUpdate.datetime = moment(messageUpdate.datetime).format('YYYY-MM-DD HH:mm:ss')
 		email.sendEmail({
 			sendee: '81085036@qq.com',
 			subject: '《我在这里 - 有新的留言》',
