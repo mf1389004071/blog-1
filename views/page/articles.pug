@@ -20,5 +20,5 @@ block content
 					ul.articles-li
 						- for (var j = 0; j < articles[i].count; j++)
 							li
-								a.article-title(type='ajax_a', href=`/article/${articles[i].id[j]}`) · #{articles[i].title[j]}
 								span (#{articles[i].pageview[j]})
+								a.article-title(type='ajax_a', href=`/article/${articles[i].id[j]}`) · #{articles[i].title[j]}

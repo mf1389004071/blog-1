@@ -842,7 +842,7 @@ $TRANSITION: all 0.3s ease;
 
 	.article-title {
         display: block;
-		margin: 10px 0;
+        margin-right: 50px;
 		font-weight: bolder;
         text-decoration: none;
         overflow: hidden;
@@ -857,7 +857,13 @@ $TRANSITION: all 0.3s ease;
         }
     }
         
-    span { float: right; line-height: 1.6em; }
+    span { 
+        float: right;
+        display: block;
+        width: 50px;
+        text-align: right;
+        line-height: 1.6em;
+    }
 }
 
 // link page

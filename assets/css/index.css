@@ -953,7 +953,7 @@ ul, li {
 
 .articles-box .article-title {
   display: block;
-  margin: 10px 0;
+  margin-right: 50px;
   font-weight: bolder;
   text-decoration: none;
   overflow: hidden;
@@ -970,6 +970,9 @@ ul, li {
 
 .articles-box span {
   float: right;
+  display: block;
+  width: 50px;
+  text-align: right;
   line-height: 1.6em;
 }
 
