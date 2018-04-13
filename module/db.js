@@ -48,11 +48,27 @@ const SettingSchema = new mongoose.Schema({
 // 为模式添加方法 （每次存储数据前都会调用这个方法）
 
 ArticleSchema.pre('save', function(next) {
+	this.datetime = Date.now()
 	if(!this.outline) {
 	  this.outline = this.content.substring(0, 15)
 	}
 	next()
-  })
+})
+
+LinkSchema.pre('save', function(next) {
+	this.datetime = Date.now()
+	next()
+})
+
+MottoSchema.pre('save', function(next) {
+	this.datetime = Date.now()
+	next()
+})
+
+MessageSchema.pre('save', function(next) {
+	this.datetime = Date.now()
+	next()
+})
 
 ArticleSchema.statics = {
 	inc: function(id, callback) {
