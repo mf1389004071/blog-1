@@ -5,7 +5,7 @@ section.message-li.messageNew
             img(src=data.avatar, title=data.nickname)
         .comment-body
             .comment_author
-                a(href=data.link || "javascript:;", title=data.nickname) #{data.nickname}
+                a(href=data.link || "javascript:;", title=data.nickname, target="_blank") #{data.nickname}
             if(data.replyid)
                 .comment_quote
                     p @#{data.replyname}

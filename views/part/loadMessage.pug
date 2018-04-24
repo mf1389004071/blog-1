@@ -6,7 +6,7 @@ each item in data
                 img(src=item.avatar, title=item.nickname)
             .comment-body
                 .comment_author
-                    a(href=item.link || "javascript:;", title=item.nickname) #{item.nickname}
+                    a(href=item.link || "javascript:;", title=item.nickname, target="_blank") #{item.nickname}
                 if(item.replyid)
                     .comment_quote
                         p @#{item.replyname}

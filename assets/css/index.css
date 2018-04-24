@@ -127,14 +127,8 @@ ul, li {
 }
 
 .NoData {
-  display: block;
-  border: 1px solid #f1f1f1;
-  border-radius: 4px;
-  box-shadow: 0px 3px 20px -3px rgba(0, 64, 128, 0.2);
-  background-color: white;
   margin-bottom: 20px;
   padding: 20px;
-  overflow: hidden;
   text-align: center;
 }
 
@@ -959,7 +953,7 @@ ul, li {
 }
 
 .message-box #message-form .input-row input {
-  width: 25%;
+  width: 30%;
 }
 
 .message-box #message-form .input-row textarea {

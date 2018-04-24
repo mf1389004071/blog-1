@@ -1,0 +1,41 @@
+.message-box
+    .respond-box
+        h4.respond-title 输入你的想法
+        form#message-form
+            input(name='replyid', type='hidden', value="")
+            if pageType === "comment"
+                input(name='articleid', type='hidden', value=article._id)
+            .input-row
+                input.form-control(name='nickname', type='text', placeholder='昵称:', value=user.nickname || "")
+                input.form-control(name='email', type='text', placeholder='邮箱:', value=user.email || "")
+                input.form-control(name='link', type='text', placeholder='博客:(可不填写)', value=user.link || "")
+            .input-row
+                textarea.form-control(name='content', placeholder='随便说点什么叭！', rows='5')
+            a(href='javascript:;', data-type=pageType onclick='messageSubmit(this)') send
+
+    if (messages.length == 0)
+        h4.NoData #{prompt}
+    else
+        article.message-list
+            each item in messages
+                section.message-li
+                    .comment
+                        .comment-avatar
+                            img(src=item.avatar, title=item.nickname)
+                        .comment-body
+                            .comment_author
+                                a(href=item.link || "javascript:;", title=item.nickname, target="_blank") #{item.nickname}
+                            if(item.replyid)
+                                .comment_quote
+                                    p @#{item.replyname}
+                                    p #{item.replycontent}
+                            .comment_text
+                                p #{item.content}
+                            .comment_other
+                                small #{item.datetime}
+                                a(href='javascript:;', data-id=item._id, data-nickname=item.nickname, onclick='replyMessage(this)') 回复
+        if (messages.length == 5)
+            if pageType === "comment"
+                .btn-load(href="javascript:;", data-id=article._id, data-type="comment", onclick='loadMessage(this)') 点击加载更多
+            if pageType === "message"
+                .btn-load(href="javascript:;", data-type="message", onclick='loadMessage(this)') 点击加载更多

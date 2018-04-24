@@ -4,7 +4,7 @@ const express       = require('express')         // express 框架
 const marked        = require('marked')          // 解析markdown文件
 const email         = require('../module/email') // 发送邮件
 const utils 		= require('../module/utils') // 工具
-const { Article, Link, Message } = require('../module/db') // 数据库模型
+const { Article, Comment, Link, Message } = require('../module/db') // 数据库模型
 
 var router 			= express.Router()
 
@@ -127,7 +127,8 @@ router.get('/search/:keyword/page/:page', function(req, res) {
 
 // article page
 router.get('/article/:_id', function(req, res) {
-	let id = req.params._id
+	var id = req.params._id
+	var user = utils.loadUserCookie(req)
 
 	let incArticle = function() {
 		return new Promise(function(resolve, reject) {
@@ -145,21 +146,37 @@ router.get('/article/:_id', function(req, res) {
 				article = JSON.parse(JSON.stringify(article))
 				article.datetime = moment(article.datetime).format('YYYY-MM-DD')
 				article.html = marked(article.content)
-				resolve(article)
+				resolve({ article })
+			})
+		})
+	}
+
+	let getComment = function() {
+		return new Promise(function(resolve, reject) {
+			Comment.fetch({ articleid: id, state: true }, (err, comments) => {
+				if(err) reject(err)
+				utils.formatReply('comment', comments).then(comments => {
+					resolve({ comments })
+				})
 			})
 		})
 	}
 
 	incArticle()
-	.then(getArticle)
-	.then(function(resolve) {
-		utils.GetCommon(result => {
-			result.article = resolve
-			res.render('page/article', result)
+	.then(function() {
+		Promise.all([getArticle(), getComment()])
+		.then(function(resolve) {
+			utils.GetCommon(result => {
+				result.user = user
+				resolve.forEach(function(item, index) { result = Object.assign(result, item) })
+				res.render('page/article', result)
+			})
 		})
-	})
-	.catch(function(reject) {
-		res.render(reject)
+		.catch(function(reject) {
+			console.log(reject)
+		})
+	}).catch(function(reject) {
+		console.log(reject)
 	})
 })
 
@@ -216,53 +233,18 @@ router.get('/about', function(req, res) {
 
 // message page
 router.get('/message', function(req, res) {
-	var user = {}
+	var user = utils.loadUserCookie(req)
 
-	if(req.cookies.user) {
-		var cookieUser = req.cookies.user
-		user = {
-			nickname: cookieUser.nickname,
-			email: cookieUser.email,
-			link: cookieUser.link
-		}
-	}
-
-	var loadReply = function(message) {
-		return new Promise(function(resolve, reject) {
-			Message.fetchById(message.replyid, (err, replyMessage) => {
-				if(err) reject(err)
-				message.replyname = replyMessage.nickname
-				message.replycontent = replyMessage.content
-				resolve(message)
+	Message.fetch({ state: true }, function(err, messages) {
+		if(err) return res.send(err)
+		utils.formatReply('message', messages).then(messages => {
+			utils.GetCommon(result => {
+				result.meta_title = '留言 - ' + result.title
+				result.messages = messages
+				result.user = user
+				res.render('page/message', result)
 			})
 		})
-	}
-
-	var asyncReply = async function formatReply (messages) {
-		var messages = JSON.parse(JSON.stringify(messages))
-		for(let item of messages) {
-			item.avatar = utils.getAvatar(item.email)
-			item.datetime = moment(item.datetime).format('YYYY-MM-DD HH:mm:ss')
-
-			if(item.replyid) {
-				item = await loadReply(item)
-			}else {
-				item.replyname = '';
-				item.replycontent = '';
-			}
-		}
-
-		utils.GetCommon(result => {
-			result.meta_title = '留言 - ' + result.title
-			result.messages = messages
-			result.user = user
-			res.render('page/message', result)
-		})
-	}
-
-	Message.fetch({ state: true, page: 1 }, function(err, messages) {
-		if(err) return res.send(err)
-		asyncReply(messages)
 	})
 })
 

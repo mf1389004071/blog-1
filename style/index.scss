@@ -165,7 +165,8 @@ $TRANSITION: all 0.3s ease;
 
 // 没有数据显示样式
 .NoData {
-    @include boxStyle;
+	margin-bottom: $MARGIN;
+    padding: $MARGIN;
 	text-align: center;
 }
 
@@ -846,7 +847,7 @@ $TRANSITION: all 0.3s ease;
             justify-content: space-between;
             margin-bottom: $MARGIN;
             
-            input { width: 25%; }
+            input { width: 30%; }
     
             textarea { flex-grow: 1; resize: none; }
     

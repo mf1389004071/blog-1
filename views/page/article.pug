@@ -27,3 +27,7 @@ block content
 				each tag in article.tags
 					li.article-tag-list-item
 						a(href=`/tag/${tag}/`, type='ajax_a') ##{tag}
+	- prompt = "当前文章还没有人评论！"
+	- messages = comments
+	- pageType = "comment"
+	include ../part/messageBox

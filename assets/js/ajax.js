@@ -36,13 +36,18 @@ function login(code, success) {
 /**
  * 异步加载留言
  * 
+ * @param {any} type 加载数据类型
  * @param {any} page 页码
  * @param {any} beforeSend 请求前
  * @param {any} success 成功回调
  */
-function AjaxGetMessage(page, beforeSend, success, error) {
+function AjaxGetMessage(param, beforeSend, success, error) {
+    var url = ""
+    if(param.type === "message") url = `/api/message/page/${param.page}`
+    if(param.type === "comment") url = `/api/comment/${param.id}/${param.page}`
+    if(!url) return $.alert("加载类型错误！", "error")
     requests({
-        url: 'api/message/page/' + page,
+        url: url,
         beforeSend: beforeSend,
         success: success,
         error: error
@@ -57,9 +62,13 @@ function AjaxGetMessage(page, beforeSend, success, error) {
  * @param {any} success 
  * @param {any} complete 
  */
-function AjaxAddMessage(message, beforeSend, success, complete) {
+function AjaxAddMessage(type, message, beforeSend, success, complete) {
+    var url = ""
+    if(type === "comment") url = '/api/comment/add'
+    if(type === "message") url = '/api/message/add'
+    if(!type) return $.alert("请求类型错误！", "error")
     requests({
-        url: 'api/message/add',
+        url: url,
         type: 'POST',
         data: JSON.stringify({ message }),
         beforeSend: beforeSend,

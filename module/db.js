@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 const ArticleSchema = new mongoose.Schema({
   title: String,
@@ -9,6 +10,17 @@ const ArticleSchema = new mongoose.Schema({
   top: Boolean,
   pageview: { type: Number, default: 0 },
   datetime: { type: Date, default: Date.now() },
+})
+
+const CommentSchema = new mongoose.Schema({
+	articleid: { type: Schema.Types.ObjectId, ref: 'Article' },
+	replyid: String,
+	nickname: String,
+	content: String,
+	link: String,
+	email: String,
+	state: { type: Boolean, default: false },
+	datetime: { type: Date, default: Date.now() },
 })
 
 const LinkSchema = new mongoose.Schema({
@@ -52,6 +64,11 @@ ArticleSchema.pre('save', function(next) {
 	if(!this.outline) {
 	  this.outline = this.content.substring(0, 15)
 	}
+	next()
+})
+
+CommentSchema.pre('save', function(next) {
+	this.datetime = Date.now()
 	next()
 })
 
@@ -103,14 +120,14 @@ ArticleSchema.statics = {
 	},
 	fetchTop: function(callback) {
 		return this
-			.find({'top': true})
-			.sort({'datetime': -1})
-			.exec(callback)
+		.find({'top': true})
+		.sort({'datetime': -1})
+		.exec(callback)
 	},
 	findById: function(id, callback) {
 		return this
-			.findOne({_id: id})
-			.exec(callback)
+		.findOne({_id: id})
+		.exec(callback)
 	},
 	fetchTime: function(callback) {
 		var operation = [
@@ -129,14 +146,14 @@ ArticleSchema.statics = {
 		]
 
 		return this
-			.aggregate(operation)
-			.exec(callback)
+		.aggregate(operation)
+		.exec(callback)
 	},
 	fetchById: function(id, callback) {
 		return this
-		  .findOne({_id: id})
-		  .exec(callback)
-	  },
+		.findOne({_id: id})
+		.exec(callback)
+	},
 	fetchType: function(callback) {
 		var operation = [
 			{
@@ -148,23 +165,80 @@ ArticleSchema.statics = {
 		]
 
 		return this
-			.aggregate(operation)
+		.aggregate(operation)
 		.exec(callback)
 	},
 	fetchTags: function(callback) {
-	return this.distinct('tags')
-			.exec(callback)
+		return this.distinct('tags')
+		.exec(callback)
 	},
 	updateById: function(article, callback) {
-	return this
+		return this
 		.update({_id: article._id}, {$set: article})
 		.exec(callback)
 	},
 	deleteById: function(id, callback) {
 		return this
-		  .remove({_id: id})
-		  .exec(callback)
-	  },
+		.remove({_id: id})
+		.exec(callback)
+	},
+}
+
+CommentSchema.statics = {
+	count: function(param, callback) {
+		var option = {}
+		if(param.articleid) option.articleid = param.articleid
+		if(param.state) option.state = param.state
+		
+		return this
+		.find(option)
+		.count()
+		.exec(callback)
+	},
+	fetch: function(param, callback) {
+		var option = {}
+		if(param.articleid) option.articleid = param.articleid
+		if(param.state) option.state = param.state
+		param.page = param.page || 1
+
+		return this
+		.find(option)
+		.limit(pageNumber)
+		.skip((param.page - 1) * pageNumber)
+		.sort({ 'datetime': 1 })
+		.exec(callback)
+	},
+	fetchRelation: function(param, callback) {
+		var option = {}
+		if(param.articleid) option.articleid = param.articleid
+		if(param.state) option.state = param.state
+		param.page = param.page || 1
+
+		return this
+		.find(option)
+		.limit(pageNumber)
+		.skip((param.page - 1) * pageNumber)
+		.sort({ 'datetime': -1 })
+		.populate([
+			{ path : 'articleid', select : { title: 1 } }
+		])
+		.exec(callback)
+	},
+	fetchById: function(id, callback) {
+		return this
+		.findOne({_id: id})
+		.exec(callback)
+	},
+	updateStateById: function(id, callback) {
+	  return this
+		.update({_id: id}, {$set: { state: true }})
+		.exec(callback)
+	},
+	deleteById: function(id, callback) {
+	  return this
+		.remove({_id: id})
+		.exec(callback)
+	},
 }
 
 LinkSchema.statics = {
@@ -193,9 +267,9 @@ LinkSchema.statics = {
 	},
 	fetchAuth: function(type, callback) {
 		return this
-			.find({'type': type, 'state': true})
-			.sort({'datetime': -1})
-			.exec(callback)
+		.find({'type': type, 'state': true})
+		.sort({'datetime': -1})
+		.exec(callback)
 	},
 	fetchById: function(id, callback) {
 		return this
@@ -213,10 +287,10 @@ LinkSchema.statics = {
 		.exec(callback)
 	},
 	deleteById: function(id, callback) {
-	return this
-	.remove({_id: id})
-	.exec(callback)
-},
+		return this
+		.remove({_id: id})
+		.exec(callback)
+	},
 }
 
 MottoSchema.statics = {
@@ -243,8 +317,8 @@ MottoSchema.statics = {
 	},
 	fetchAll: function(callback) {
 		return this
-			.find({})
-			.exec(callback)
+		.find({})
+		.exec(callback)
 	},
 	deleteById: function(id, callback) {
 	  return this
@@ -271,11 +345,11 @@ MessageSchema.statics = {
 	  param.page = param.page || 1
   
 	  return this
-	  .find(option)
-	  .limit(pageNumber)
-	  .skip((param.page - 1) * pageNumber)
-	  .sort({ 'datetime': -1 })
-	  .exec(callback)
+		.find(option)
+		.limit(pageNumber)
+		.skip((param.page - 1) * pageNumber)
+		.sort({ 'datetime': -1 })
+		.exec(callback)
 	},
 	fetchById: function(id, cb) {
 		return this
@@ -310,13 +384,14 @@ SettingSchema.statics = {
 		.findOne({}, { _id: 0, authorize_code: 1 })
 		.exec(callback)
 	},
-  }
+}
 
 // ===> 抛出模式
 const Article = mongoose.model('Article', ArticleSchema)
+const Comment = mongoose.model('Comment', CommentSchema)
 const Link    = mongoose.model('Link', LinkSchema)
 const Motto   = mongoose.model('Motto', MottoSchema)
 const Message = mongoose.model('Message', MessageSchema)
 const Setting = mongoose.model('Config', SettingSchema, 'config')
 
-module.exports = { Article, Link, Motto, Message, Setting }
+module.exports = { Article, Comment, Link, Motto, Message, Setting }

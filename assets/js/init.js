@@ -200,38 +200,6 @@ function loadError() {
 	$('.major-content').html(errorHTML)
 	$('title').html(errorTITLE)
 }
-
-// 加载留言
-function loadMessage(el) {
-	var $load = $(el)
-
-	if($load.hasClass('load-message-animation')) return console.log('加载中。。。')
-	if($load.hasClass('end')) return console.log('加载完成。。。')
-
-	var page = $load.data('page') || 2
-	var loadTHML = $load.text()
-	var loadDOM = `	<div class="rect1"></div>
-					<div class="rect2"></div>
-					<div class="rect3"></div>
-					<div class="rect4"></div>
-					<div class="rect5"></div>
-	`
- 
-	AjaxGetMessage(page, function() {
-		$load.empty().append(loadDOM).addClass("load-message-animation")
-	}, function(data) {
-		if(!data) {
-			$load.empty().removeClass("load-message-animation").addClass('end').text("以全部加载完成！")
-		}else {
-			$load.empty().removeClass("load-message-animation").text(loadTHML)
-			$load.data("page", ++page)
-			$(".message-list").append(data)
-		}
-	}, function(err) {
-		$.alert('加载留言失败，请稍后再试~')
-		$load.empty().removeClass("load-message-animation").text(loadTHML)
-	})
-}
  
 // 回复留言
 function replyMessage(el) {
@@ -240,18 +208,56 @@ function replyMessage(el) {
 	var messageForm = $("#message-form")
  
 	if(section.find('#message-form').length < 1) {
-		let replyid = $a.data("id");
-		let nickname = $a.data("nickname");
-		messageForm.find("textarea").attr("placeholder", "@" + nickname);
-		messageForm.find("input[type=hidden]").val(replyid);
-		section.append(messageForm);
+		let replyid = $a.data("id")
+		let nickname = $a.data("nickname")
+		messageForm.find("textarea").attr("placeholder", "@" + nickname)
+		messageForm.find("input[type=hidden][name=replyid]").val(replyid)
+		section.append(messageForm)
 		$a.text('取消')
 	}else {
-		messageForm.find("textarea").attr("placeholder", "说点什么吧～");
-		messageForm.find("input[type=hidden]").val("");
-		$(".respond-box").append(messageForm);
+		messageForm.find("textarea").attr("placeholder", "说点什么吧～")
+		messageForm.find("input[type=hidden]").val("")
+		$(".respond-box").append(messageForm)
 		$a.text('回复')
 	}
+}
+
+// 加载留言
+function loadMessage(el) {
+	var $load = $(el)
+
+	if($load.hasClass('load-message-animation')) return console.log('加载中。。。')
+	if($load.hasClass('end')) return console.log('加载完成。。。')
+
+	var param = {
+		type: $load.attr('data-type'),
+		page: $load.data('page') || 2,
+	}
+	if(param.type === 'comment') param.id = $load.attr('data-id')
+	
+	var loadTHML = $load.text()
+	var loadDOM = `	
+		<div class="rect1"></div>
+		<div class="rect2"></div>
+		<div class="rect3"></div>
+		<div class="rect4"></div>
+		<div class="rect5"></div>
+	`
+ 
+	AjaxGetMessage(param, function() {
+		$load.empty().append(loadDOM).addClass("load-message-animation")
+	}, function(data) {
+		if(!data) {
+			$load.empty().removeClass("load-message-animation").addClass('end').text("以全部加载完成！")
+		}else {
+			$load.empty().removeClass("load-message-animation").text(loadTHML)
+			$load.data("page", ++param.page)
+			$(".message-list").append(data)
+		}
+	}, function(err) {
+		$.alert('加载信息失败，请稍后再试~')
+		$load.empty().removeClass("load-message-animation").text(loadTHML)
+	})
 }
  
 // 提交留言
@@ -259,7 +265,8 @@ function messageSubmit(el) {
  
 	if($(el).attr("disabled")) return
  
-	var form = $("#message-form")[0];
+	var form = $("#message-form")[0]
+	var type = $(el).attr('data-type')
  
 	if($.trim(form.nickname.value) == "") {
 	   form.nickname.focus()
@@ -273,15 +280,23 @@ function messageSubmit(el) {
  
 	if($.trim(form.content.value)  == "") {
 	   form.content.focus()
-	   return $.alert("难道就没有一句话想对我说吗？", 'waring')
+	   return $.alert("难道就没有一句想吐槽的吗？", 'waring')
 	}
  
-	AjaxAddMessage($("#message-form").serialize(), function() {
+	AjaxAddMessage(type, $("#message-form").serialize(), function() {
 		$(el).attr('disabled',"true")
 	}, function(data) {
-		if(!data) return $.alert("获取数据格式错误！", 'error');
-		$.alert("DUANG~ 留言成功！", 'success');
-		$(".message-list").prepend(data)
+		if(!data) return $.alert("获取数据格式错误！", 'error')
+		$.alert("DUANG~ 留言成功！", 'success')
+
+		if($(".message-list").length < 1) {
+			$(".NoData") && $(".NoData").remove()
+			$(".message-box").append(`<div class='message-list'>${data}</div>`)
+		}else {
+			if(type === "comment") $(".message-list").append(data)
+			if(type === "message") $(".message-list").prepend(data)
+		}
+
 		form.content.value = ''
 	}, function() {
 		$(el).removeAttr('disabled')

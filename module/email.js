@@ -7,7 +7,7 @@ var transporter = nodemailer.createTransport({
     requireTLS: true,
     auth: {
         user: 'guanquanhong@outlook.com',
-        pass: 'xxxxxx',
+        pass: 'xxxxx',
     }
 })
 
