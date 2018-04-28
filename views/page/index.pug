@@ -29,7 +29,7 @@ block content
                             a(href=`/tag/${tag}/`, type='ajax_a') ##{tag}
 
     if (articles.length == 0)
-        h4.NoData 未查询到数据
+        h4.NoData.Box 未查询到数据
     else
         article#article-list
             each item in articles

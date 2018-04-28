@@ -91,84 +91,23 @@ function initMusic() {
 	var Agents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod"]
 	for(let item of Agents) { if(userAgentInfo.indexOf(item) >= 0) return false }
 
-	var playlist = [
-        {
-            "title": "アストロノーツ",
-            "author": "れをる",
-            "url": "/music/れをる - アストロノーツ.mp3",
-            "pic": "https://p3.music.126.net/vPgS9BjwMKNaTATevXBXfg==/6657542907991862.jpg?param=120y120"
-        },
-        {
-            "title": "No title",
-            "author": "れをる",
-            "url": "/music/れをる - No title.mp3",
-            "pic": "https://p1.music.126.net/cZPx3peGTuWEI_GaZB5CDg==/8892850045794893.jpg?param=120y120"
-        },
-        {
-            "title": "カントリー・ロード",
-            "author": "ツヅリ・ヅクリ",
-            "url": "/music/ツヅリ・ヅクリ - カントリー・ロード.mp3",
-            "pic": "https://p1.music.126.net/fiyQkkGxsS2rx1ymbBuphg==/7952767605425790.jpg?param=120y120"
-        },
-        {
-            "title": "ぼくら",
-            "author": "ヘクとパスカル",
-            "url": "/music/ヘクとパスカル - ぼくら.mp3",
-            "pic": "https://p1.music.126.net/KrBV3KoeVY1ZXoOv7Wbg1Q==/7804333534626753.jpg?param=120y120"
-        },
-        {
-            "title": "いつも何度でも",
-            "author": "伊藤サチコ",
-            "url": "/music/伊藤サチコ - いつも何度でも.mp3",
-            "pic": "https://p1.music.126.net/GYWkXtrnAawOWO2nfLg3PA==/109951163028865726.jpg?param=120y120"
-        },
-        {
-            "title": "銀色飛行船",
-            "author": "Supercell",
-            "url": "/music/Supercell - 銀色飛行船.mp3",
-            "pic": "https://p1.music.126.net/0gJSRbh0TE30OtnDebHmeA==/5839506255164737.jpg?param=120y120"
+	var playlist = []
+	requests({
+		url: '/playlist.json',
+		success: data => {
+			aplayer = new APlayer({
+				element: document.getElementById('aplayer'),
+				narrow: false,
+				autoplay: false,
+				showlrc: false,
+				mutex: true,
+				preload: 'none',
+				theme: '#ad7a86',
+				mode: 'random',
+				music: data
+			})
 		},
-        {
-            "title": "夢追人",
-            "author": "KOKIA",
-            "url": "/music/KOKIA - 夢追人.mp3",
-            "pic": "https://p1.music.126.net/3t5JIxQKohR5gk_cZqjLGw==/2275989069517444.jpg?param=120y120"
-        },
-        {
-            "title": "TRAIN",
-            "author": "ONE☆DRAFT",
-            "url": "/music/ONE☆DRAFT - TRAIN.mp3",
-            "pic": "https://p1.music.126.net/Tet19RIOsn_ouka8v9GMbw==/916992697608061.jpg?param=120y120"
-        },
-        {
-            "title": "小さな恋のうた",
-            "author": "ダイアナ・ガーネット",
-            "url": "/music/ダイアナ・ガーネット - 小さな恋のうた.mp3",
-            "pic": "https://p1.music.126.net/Iw6fszahMzjO7ShPmk0THA==/5648191232016535.jpg?param=120y120"
-        },
-        {
-            "title": "Everyday Love",
-            "author": "少女时代",
-            "url": "/music/少女时代 - Everyday Love.mp3",
-            "pic": "https://p1.music.126.net/-DZrXSJuP5nC2W3YSJb5Lw==/5788928720322741.jpg?param=120y120"
-        },
-        {
-            "title": "明日晴れるかな",
-            "author": "桑田佳祐",
-            "url": "/music/桑田佳祐 - 明日晴れるかな.mp3",
-            "pic": "https://p1.music.126.net/hKAMn29IQksdDQs5PI3m5w==/2490393836938087.jpg?param=120y120"
-        }
-    ]
-
-    aplayer = new APlayer({
-        element: document.getElementById('aplayer'),
-        narrow: false,
-        autoplay: false,
-        showlrc: false,
-        mutex: true,
-        theme: '#ad7a86',
-        mode: 'random',
-        music: playlist
+		error: err => { console.log(err) }
 	})
 }
  

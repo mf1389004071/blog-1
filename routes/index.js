@@ -143,10 +143,14 @@ router.get('/article/:_id', function(req, res) {
 		return new Promise(function(resolve, reject) {
 			Article.findById(id, (err, article) => {
 				if(err) reject(err)
-				article = JSON.parse(JSON.stringify(article))
-				article.datetime = moment(article.datetime).format('YYYY-MM-DD')
-				article.html = marked(article.content)
-				resolve({ article })
+				if(article) {
+					article = JSON.parse(JSON.stringify(article))
+					article.datetime = moment(article.datetime).format('YYYY-MM-DD')
+					article.html = marked(article.content)
+					resolve({ article })
+				}else {
+					resolve({ article: null })
+				}
 			})
 		})
 	}

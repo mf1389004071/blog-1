@@ -239,6 +239,11 @@ CommentSchema.statics = {
 		.remove({_id: id})
 		.exec(callback)
 	},
+	deleteByArticleId: function(articleid, callback) {
+		return this
+		.remove({ articleid })
+		.exec(callback)
+	}
 }
 
 LinkSchema.statics = {

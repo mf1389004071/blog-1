@@ -4,30 +4,33 @@
 extends ../common/layout
 
 block content
-	article.article-box
-		.article-header
-			h1.article-title
-				a(href=`/article/${article._id}`, title=article.title, type='ajax_a') #{article.title}
-			ul.article-info
-				li
-					i.icon.icon-time
-					span #{article.datetime}
-				li
-					i.icon.icon-type
-					span #{article.type}
-				li
-					i.icon.icon-see
-					span #{article.pageview}
+	if (!article)
+		h4.NoData 未查询到数据
+	else
+		article.article-box
+			.article-header
+				h1.article-title
+					a(href=`/article/${article._id}`, title=article.title, type='ajax_a') #{article.title}
+				ul.article-info
+					li
+						i.icon.icon-time
+						span #{article.datetime}
+					li
+						i.icon.icon-type
+						span #{article.type}
+					li
+						i.icon.icon-see
+						span #{article.pageview}
 
-		.article-body.markdownInfo.clearfix !{article.html}
+			.article-body.markdownInfo.clearfix !{article.html}
 
-		.article-footer.clearfix
-			a.article-share-link(href=`/article/${article.id}`) share
-			ul.article-tag-list
-				each tag in article.tags
-					li.article-tag-list-item
-						a(href=`/tag/${tag}/`, type='ajax_a') ##{tag}
-	- prompt = "当前文章还没有人评论！"
-	- messages = comments
-	- pageType = "comment"
-	include ../part/messageBox
+			.article-footer.clearfix
+				a.article-share-link(href=`/article/${article.id}`) share
+				ul.article-tag-list
+					each tag in article.tags
+						li.article-tag-list-item
+							a(href=`/tag/${tag}/`, type='ajax_a') ##{tag}
+		- prompt = "当前文章还没有人评论！"
+		- messages = comments
+		- pageType = "comment"
+		include ../part/messageBox

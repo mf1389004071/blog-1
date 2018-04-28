@@ -92,7 +92,7 @@ input, select {
     vertical-align:middle;
 }
 
-ul, li {
+ul {
     list-style: none;
 }
 
@@ -167,7 +167,16 @@ $TRANSITION: all 0.3s ease;
 .NoData {
 	margin-bottom: $MARGIN;
     padding: $MARGIN;
-	text-align: center;
+    overflow: hidden;
+    text-align: center;
+    
+    &.Box {
+        display: block;
+        border: $BORDER;
+        border-radius: $RADIUS;
+        box-shadow: $BOX_SHADOW;
+        background-color: $BGC;
+    }
 }
 
 // 分页盒子容器
@@ -189,7 +198,6 @@ $TRANSITION: all 0.3s ease;
                 color: $FontColor;
                 padding: 0 5px;
                 transition: $TRANSITION;
-                -webkit-transition: $TRANSITION;
     
                 &:hover { color: $FontColor_HOVER; }
             }
@@ -249,7 +257,6 @@ $TRANSITION: all 0.3s ease;
     box-shadow: 1px 1px 3px #262a30;
 	background-color: #262a30;
 	transition: $TRANSITION;
-    -webkit-transition: $TRANSITION;
     z-index: 1995;
     
     &.active { top: 80%; }
@@ -257,26 +264,35 @@ $TRANSITION: all 0.3s ease;
 
 // 页面标题
 .page-title-box {
-	@include boxStyle;
+    @include boxStyle;
+    position: relative;
 	display: flex;
-	display: -webkit-flex;
     align-items: center;
     justify-content: center;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
     border: none;
 
-    &.articles { background-image: url(../images/banner-page-articles.jpg); }
-    &.message { background-image: url(../images/banner-page-message.jpg); }
-    &.about { background-image: url(../images/banner-page-about.jpg); }
-    &.link { background-image: url(../images/banner-page-link.jpg); }
+    &.articles { .page-title-image { background-image: url(../images/banner-page-articles.jpg); } }
+    &.message { .page-title-image { background-image: url(../images/banner-page-message.jpg); } }
+    &.about { .page-title-image { background-image: url(../images/banner-page-about.jpg); } }
+    &.link { .page-title-image { background-image: url(../images/banner-page-link.jpg); } }
+
+    .page-title-image {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        filter: blur(5px);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+    }
 
 	.page-title-content {
+        z-index: 2;
 		padding: $MARGIN 0;
 		text-align: center;
 
 		h1 {
+            color: #FFFFFF;
 			font-size: 2em;
 			margin: $MARGIN 0;
 			letter-spacing: 10px;
@@ -287,6 +303,7 @@ $TRANSITION: all 0.3s ease;
 		P {
 			color: #ccc;
 			margin: $MARGIN 0;
+            text-shadow: 0 0 2px #585858;
 		}
 
 	}
@@ -309,17 +326,15 @@ $TRANSITION: all 0.3s ease;
 
         .header-inner-mask {
             position: absolute;
-            top: -10px;
             left: 0;
             width: 100%;
             height: 100%;
-            padding-bottom: 10px;
             box-sizing: content-box;
             background: url(../images/banner.jpg) rgba(0, 0, 0, .4);
             background-size: cover;
-            background-position: center 10px;
+            background-position: center 0;
+            background-attachment: fixed;
             filter: blur(5px);
-            -webkit-filter: blur(5px);
         }
 
         .header-inner {
@@ -343,7 +358,6 @@ $TRANSITION: all 0.3s ease;
                 text-decoration: none;
                 text-shadow: 0 1px rgba(0, 0, 0, 0.2);
                 transition: $TRANSITION;
-                -webkit-transition: $TRANSITION;
                 margin-right: 30px;
                 line-height: 36px;
         
@@ -408,11 +422,12 @@ $TRANSITION: all 0.3s ease;
         justify-content: center;
         flex-direction: column;
         width: 100%;
-        height: 300px;
+        height: 350px;
         background: url(../images/banner.jpg) #ccc;
         background-size: cover;
         background-repeat: no-repeat;
         background-position: center 0;
+        background-attachment: fixed;
 
         .header-title {
             font-size: 40px;
@@ -484,7 +499,6 @@ $TRANSITION: all 0.3s ease;
                         outline: none;
                         cursor: pointer;
                         transition: $TRANSITION;
-                        -webkit-transition: $TRANSITION;
                         background-color: transparent;
 
                         &:hover { background-color: #ebebeb; }
@@ -515,7 +529,6 @@ $TRANSITION: all 0.3s ease;
     
                 & > li {
                     transition: $TRANSITION;
-                    -webkit-transition: $TRANSITION;
                     border-bottom: 1px solid #ddd;
     
                     &:last-child { border-bottom: 0; }
@@ -572,14 +585,12 @@ $TRANSITION: all 0.3s ease;
                     margin-right: 5px;
                     margin-bottom: 5px;
                     transition: $TRANSITION;
-                    -webkit-transition: $TRANSITION;
     
                     & > a {
                         display: block;
                         padding: 5px 8px;
                         text-decoration: none;
                         transition: $TRANSITION;
-                        -webkit-transition: $TRANSITION;
                     }
     
                     &:nth-of-type(1n) > a { color: nth($ASIDE_COLORS, 1); }
@@ -651,7 +662,6 @@ $TRANSITION: all 0.3s ease;
 				line-height: 1.2em;
 				text-decoration: none;
 				transition: $TRANSITION;
-				-webkit-transition: $TRANSITION;
 
 				&:hover {
 					color: $FontColor_HOVER;
@@ -704,7 +714,6 @@ $TRANSITION: all 0.3s ease;
 			color: #999;
             text-decoration: none;
             transition: $TRANSITION;
-            -webkit-transition: $TRANSITION;
             
             &:hover {
                 color: #F36;
@@ -746,7 +755,6 @@ $TRANSITION: all 0.3s ease;
         text-overflow: ellipsis;
         white-space: nowrap;
         transition: $TRANSITION;
-        -webkit-transition: $TRANSITION;
 		color: $FontColor;
 
 		&:hover {
@@ -872,7 +880,6 @@ $TRANSITION: all 0.3s ease;
             color: #fff;
             border-radius: $RADIUS;
             transition: 0.5s;
-            -webkit-transition: 0.5s;
     
             &:hover { background-color: #00AA00; }
         }
@@ -1093,10 +1100,7 @@ $TRANSITION: all 0.3s ease;
     position: fixed;
     top: 80px;
     right: 80px;
-    -webkit-transform: translateZ(0);
-    -ms-transform: translateZ(0);
     transform: translateZ(0);
-    -webkit-animation: loading 1.7s infinite ease, round 1.7s infinite ease;
     animation: loading 1.7s infinite ease, round 1.7s infinite ease;
 }
 
