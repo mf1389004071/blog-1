@@ -603,9 +603,9 @@ $TRANSITION: all 0.3s ease;
 	background-color: #262a30;
 	background-image: url(/images/banner-footer.jpg);
     background-repeat: no-repeat;
-    background-position: top center;
+    background-position: center;
     background-size: cover;
-    background-attachment: fixed;
+    // background-attachment: fixed;
 
     .footer-content {
         max-width: $MAX_WIDTH;

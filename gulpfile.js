@@ -29,12 +29,12 @@ gulp.task('css', function() {
 })
 
 // 默认命令
-gulp.task('default', ['clean', 'css'], function() {
+gulp.task('default', gulp.series(gulp.parallel('clean', 'css')), function() {
 	console.log('statr default task!');
 })
 
 
 // 监听文件发生改变进行css编译
-gulp.watch('style/*.scss', ['default']).on('change', function(e) {
+gulp.watch('style/*.scss', gulp.parallel('default')).on('change', function(e) {
 	console.log('style/*.scss 被改变 开始编译！');
 })

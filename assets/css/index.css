@@ -789,9 +789,8 @@ ul {
   background-color: #262a30;
   background-image: url(/images/banner-footer.jpg);
   background-repeat: no-repeat;
-  background-position: top center;
+  background-position: center;
   background-size: cover;
-  background-attachment: fixed;
 }
 
 .footer-container .footer-content {
