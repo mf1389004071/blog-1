@@ -142,8 +142,9 @@ function loadError() {
  
 // 回复留言
 function replyMessage(el) {
+	$('.message-li .comment-body .comment-other > a').text('回复')
 	var $a = $(el)
-	var section = $a.parents(".comment")
+	var section = $a.parents(".message-li")
 	var messageForm = $("#message-form")
  
 	if(section.find('#message-form').length < 1) {

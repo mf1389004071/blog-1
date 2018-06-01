@@ -15,11 +15,13 @@ block content
 		h4.NoData 未查询到数据
 	else
 		article.articles-box
-			- for (var i = 0; i < articles.length; i ++)
-				div.articles-group
-					h3.articles-date # #{articles[i]._id}
-					ul.articles-li
-						- for (var j = 0; j < articles[i].count; j++)
-							li
-								span (#{articles[i].pageview[j]})
-								a.article-title(type='ajax_a', href=`/article/${articles[i].id[j]}`) · #{articles[i].title[j]}
+			div.articles-timeline
+				- for (var i = 0; i < articles.length; i ++)
+					div.articles-group
+						h3.articles-date # #{articles[i]._id}
+						ul.articles-list
+							- for (var j = 0; j < articles[i].count; j++)
+								li.article-item
+									span.article-item-time= articles[i].datetime[j]
+									span.article-item-pageview (#{articles[i].pageview[j]})
+									a.article-title(type='ajax_a', href=`/article/${articles[i].id[j]}`) #{articles[i].title[j]}

@@ -4,14 +4,14 @@ section.message-li.messageNew
         .comment-avatar
             img(src=data.avatar, title=data.nickname)
         .comment-body
-            .comment_author
+            .comment-author
                 a(href=data.link || "javascript:;", title=data.nickname, target="_blank") #{data.nickname}
             if(data.replyid)
-                .comment_quote
+                .comment-quote
                     p @#{data.replyname}
                     p #{data.replycontent}
             .comment_text
                 p #{data.content}
-            .comment_other
+            .comment-other
                 small #{data.datetime}
                 a(href='javascript:;', data-id=data._id, data-nickname=data.nickname onclick='replyMessage(this)') 回复

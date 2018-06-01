@@ -147,6 +147,12 @@ $TRANSITION: all 0.3s ease;
 	margin-bottom: $MARGIN;
     padding: $MARGIN;
     overflow: hidden;
+
+
+    @media (max-width: 768px) {
+        padding: $MARGIN_MIN;
+        margin-bottom: $MARGIN_MIN;
+    }
 }
 
 // 清除浮动
@@ -189,52 +195,23 @@ $TRANSITION: all 0.3s ease;
     
         li {
             display: inline-block;
-            padding: 0 5px;
-            margin: 5px;
+            margin: 5px 8px;
     
             a {
-                position: relative;
+                display: block;
+                width: 25px;
+                height: 25px;
+                line-height: 25px;
+                text-align: center;
                 text-decoration: none;
-                color: $FontColor;
-                padding: 0 5px;
+                color: #FFFFFF;
+                border-radius: 50%;
+                box-shadow: 1px 1px 3px rgba(0, 0, 0, .5);
                 transition: $TRANSITION;
-    
-                &:hover { color: $FontColor_HOVER; }
-            }
-    
-            a.active {
-                color: $FontColor_HOVER;
-    
-                &:before {
-                    position: absolute;
-                    content: "";
-                    top: 0;
-                    bottom: 0;
-                    margin: auto;
-                    height: 0px;
-                    left: -5px;
-                    border-width: 5px;
-                    border-color: #19B5FE;
-                    border-style: solid;
-                    border-top-color: transparent;
-                    border-bottom-color: transparent;
-                    border-right-width: 0;
-                }
+                background-color: nth($list: $ASIDE_COLORS, $n: 1);
 
-                &:after {
-                    position: absolute;
-                    content: "";
-                    top: 0;
-                    bottom: 0;
-                    margin: auto;
-                    height: 0px;
-                    right: -5px;
-                    border-width: 5px;
-                    border-color: #19B5FE;
-                    border-style: solid;
-                    border-top-color: transparent;
-                    border-bottom-color: transparent;
-                    border-left-width: 0;
+                &:hover, &.active {
+                    background-color: nth($list: $ASIDE_COLORS, $n: 2)
                 }
             }
         }
@@ -271,13 +248,15 @@ $TRANSITION: all 0.3s ease;
     justify-content: center;
     border: none;
 
-    &.articles { .page-title-image { background-image: url(../images/banner-page-articles.jpg); } }
-    &.message { .page-title-image { background-image: url(../images/banner-page-message.jpg); } }
-    &.about { .page-title-image { background-image: url(../images/banner-page-about.jpg); } }
-    &.link { .page-title-image { background-image: url(../images/banner-page-link.jpg); } }
+    &.articles { .page-title-image { background-image: url(/images/banner-page-articles.jpg); } }
+    &.message { .page-title-image { background-image: url(/images/banner-page-message.jpg); } }
+    &.about { .page-title-image { background-image: url(/images/banner-page-about.jpg); } }
+    &.link { .page-title-image { background-image: url(/images/banner-page-link.jpg); } }
 
     .page-title-image {
         position: absolute;
+        left: 0;
+        top: 0;
         width: 100%;
         height: 100%;
         filter: blur(5px);
@@ -330,7 +309,7 @@ $TRANSITION: all 0.3s ease;
             width: 100%;
             height: 100%;
             box-sizing: content-box;
-            background: url(../images/banner.jpg) rgba(0, 0, 0, .4);
+            background: url(/images/banner.jpg) rgba(0, 0, 0, .4);
             background-size: cover;
             background-position: center 0;
             background-attachment: fixed;
@@ -423,7 +402,7 @@ $TRANSITION: all 0.3s ease;
         flex-direction: column;
         width: 100%;
         height: 350px;
-        background: url(../images/banner.jpg) #ccc;
+        background: url(/images/banner.jpg) #ccc;
         background-size: cover;
         background-repeat: no-repeat;
         background-position: center 0;
@@ -450,8 +429,8 @@ $TRANSITION: all 0.3s ease;
 
 // body
 .body-container {
-	max-width: $MAX_WIDTH;
-	width: 100%;
+    max-width: $MAX_WIDTH;
+	width: 96%;
 	margin: auto;
     margin-top: 30px;
     
@@ -508,7 +487,6 @@ $TRANSITION: all 0.3s ease;
 
             &.music-box { 
                 padding: 0;
-                
                 .aplayer { margin: 0; }
             }
     
@@ -523,15 +501,21 @@ $TRANSITION: all 0.3s ease;
     
             .types-list {
                 list-style: none;
-                margin-left: -19px;
-                margin-right: -20px;
-                margin-bottom: -15px;
+                margin-left: -$MARGIN;
+                margin-right: -$MARGIN;
+                margin-bottom: -$MARGIN;
+
+                @media (max-width: 768px) {
+                    margin-left: -$MARGIN_MIN;
+                    margin-right: -$MARGIN_MIN;
+                    margin-bottom: -$MARGIN_MIN;
+                }
     
                 & > li {
                     transition: $TRANSITION;
-                    border-bottom: 1px solid #ddd;
+                    border-top: 1px solid #ddd;
     
-                    &:last-child { border-bottom: 0; }
+                    &:first-child { border-top: 0; }
                     &:hover { padding-left: 20px; color: #fff; }
                     &:hover > a > i { color: #fff !important; }
                     &:nth-of-type(1n) > a > i { color: nth($ASIDE_COLORS, 1); }
@@ -617,7 +601,7 @@ $TRANSITION: all 0.3s ease;
 .footer-container {
 	padding: 20px 0;
 	background-color: #262a30;
-	background-image: url(../images/banner-footer.jpg);
+	background-image: url(/images/banner-footer.jpg);
     background-repeat: no-repeat;
     background-position: top center;
     background-size: cover;
@@ -657,9 +641,9 @@ $TRANSITION: all 0.3s ease;
             
 			a {
 				color: $FontColor;
-				font-size: 2em;
+				font-size: 1.4em;
 				font-weight: bold;
-				line-height: 1.2em;
+				line-height: 1.5em;
 				text-decoration: none;
 				transition: $TRANSITION;
 
@@ -683,15 +667,8 @@ $TRANSITION: all 0.3s ease;
     }
     
     .article-body {
-        &::before,
-        &::after {
-            content: '';
-            width: 100%;
-            height: 2px;
-            background-color: #ddd;
-            background-image: linear-gradient(to left, nth($ASIDE_COLORS, 1), nth($ASIDE_COLORS, 2), nth($ASIDE_COLORS, 3), nth($ASIDE_COLORS, 4), nth($ASIDE_COLORS, 5));
-
-        }
+        border-top: 1px dashed $MAIN_COLOR;
+        border-bottom: 1px dashed $MAIN_COLOR;
     }
 		
 	.article-footer {
@@ -724,20 +701,61 @@ $TRANSITION: all 0.3s ease;
 
 // articles page
 .articles-box {
-	@include boxStyle;
+    @include boxStyle;
+    
+    .articles-timeline {
+        padding: 0 $MARGIN;
+        margin-left: $MARGIN;
+        border-left: 1px solid $MAIN_COLOR;
+
+    }
+
+    .articles-group:nth-of-type(1n) {
+        &::before { background-color: nth($ASIDE_COLORS, 1) }
+        .articles-date { color: nth($list: $ASIDE_COLORS, $n: 1) }
+        .article-item::before { background-color: nth($ASIDE_COLORS, 1) }
+    }
+
+    .articles-group:nth-of-type(2n) {
+        &::before { background-color: nth($ASIDE_COLORS, 2) }
+        .articles-date { color: nth($list: $ASIDE_COLORS, $n: 2) }
+        .article-item::before { background-color: nth($ASIDE_COLORS, 2) }
+    }
+
+    .articles-group:nth-of-type(3n) {
+        &::before { background-color: nth($ASIDE_COLORS, 3) }
+        .articles-date { color: nth($list: $ASIDE_COLORS, $n: 3) }
+        .article-item::before { background-color: nth($ASIDE_COLORS, 3) }
+    }
+
+    .articles-group:nth-of-type(4n) {
+        &::before { background-color: nth($ASIDE_COLORS, 4) }
+        .articles-date { color: nth($list: $ASIDE_COLORS, $n: 4) }
+        .article-item::before { background-color: nth($ASIDE_COLORS, 4) }
+    }
+
+    .articles-group:nth-of-type(5n) {
+        &::before { background-color: nth($ASIDE_COLORS, 5) }
+        .articles-date { color: nth($list: $ASIDE_COLORS, $n: 5) }
+        .article-item::before { background-color: nth($ASIDE_COLORS, 5) }
+    }
 
 	.articles-group {
-		padding-left: 30px;
-		margin-bottom: 30px;
-	}
-
-	.articles-li {
-		padding-left: 30px;
-
-		li {
-			line-height: 1.6em;
-			margin: 0.8em 0;
-		}
+        position: relative;
+        margin-bottom: $MARGIN;
+        
+        &::before {
+            content: "";
+            position: absolute;
+            display: block;
+            width: 16px;
+            height: 16px;
+            left: -20px;
+            top: 1.3em;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            background-color: $MAIN_COLOR;
+        }
 	}
 
 	.articles-date {
@@ -746,29 +764,59 @@ $TRANSITION: all 0.3s ease;
 		color: $MAIN_COLOR;
 	}
 
-	.article-title {
-        display: block;
-        margin-right: 50px;
-		font-weight: bolder;
-        text-decoration: none;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        transition: $TRANSITION;
-		color: $FontColor;
+	.articles-list {
+        padding-left: $MARGIN;
 
-		&:hover {
-			color: $FontColor_HOVER;
-        }
-    }
+		.article-item {
+            position: relative;
+			line-height: 1.6em;
+            margin: 0.8em 0;
+
+            &::before {
+                content: "";
+                position: absolute;
+                display: block;
+                width: 12px;
+                height: 12px;
+                left: -($MARGIN * 2);
+                top: 0.8em;
+                border-radius: 50%;
+                transform: translate(-50%, -50%);
+                background-color: $MAIN_COLOR;
+            }
+
+            .article-title {
+                display: block;
+                margin: 0 50px;
+                font-weight: bolder;
+                text-decoration: none;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                transition: $TRANSITION;
+                color: $FontColor;
         
-    span { 
-        float: right;
-        display: block;
-        width: 50px;
-        text-align: right;
-        line-height: 1.6em;
-    }
+                &:hover {
+                    color: $FontColor_HOVER;
+                }
+            }
+
+            span {
+                display: block;
+                line-height: 1.6em;
+                width: 50px;
+
+                &.article-item-time {
+                    float: left;
+                }
+
+                &.article-item-pageview {
+                    float: right;
+                    text-align: right;
+                }
+            }
+		}
+	}
 }
 
 // link page
@@ -845,17 +893,18 @@ $TRANSITION: all 0.3s ease;
         .respond-title {
             line-height: 1.5em;
             position: relative;
-            margin-bottom: 10px;
         }
     }
 
     #message-form {
+        margin: 10px 0;
+
         .input-row {
             display: flex;
             justify-content: space-between;
             margin-bottom: $MARGIN;
             
-            input { width: 30%; }
+            input { width: 32%; }
     
             textarea { flex-grow: 1; resize: none; }
     
@@ -888,7 +937,7 @@ $TRANSITION: all 0.3s ease;
     .message-list {
 
         .message-li {
-            position: relative;
+            padding: 0 $MARGIN;
             margin-bottom: 10px;
             min-height: 60px;
             box-sizing: content-box;
@@ -913,16 +962,8 @@ $TRANSITION: all 0.3s ease;
             }
         }
 
-        .comment {
-            position: relative;
-            padding-left: 100px;
-            padding-right: $MARGIN;
-            padding-bottom: $MARGIN_MIN;
-        }
-
         .comment-avatar {
-            position: absolute;
-            left: 20px;
+            float: left;
 
             img {
                 display: block;
@@ -933,11 +974,12 @@ $TRANSITION: all 0.3s ease;
         }
 
         .comment-body {
+            padding-left: 70px;
             font-size: 13px;
             line-height: 26px;
         }
 
-        .comment_author {
+        .comment-author {
             font-size: 14px;
             line-height: 32px;
 
@@ -948,7 +990,7 @@ $TRANSITION: all 0.3s ease;
             }
         }
 
-        .comment_quote {
+        .comment-quote {
             background-color: #fafafa;
             padding: 10px;
             margin-bottom: $MARGIN_MIN;
@@ -959,7 +1001,7 @@ $TRANSITION: all 0.3s ease;
             }
         }
 
-        .comment_other {
+        .comment-other {
             color: #ccc;
 
             & > a {
@@ -978,6 +1020,26 @@ $TRANSITION: all 0.3s ease;
         text-align: center;
         cursor: pointer;
         color: $MAIN_COLOR;
+    }
+
+    @media (max-width: 768px) {
+        padding: 0;
+
+        .respond-box {
+            padding: $MARGIN_MIN;
+        }
+
+        #message-form {
+            .input-row {
+                margin-bottom: $MARGIN_MIN;
+            }
+        }
+
+        .message-list {
+            .message-li {
+                padding: 0 $MARGIN_MIN;
+            }
+        }
     }
 }
 
@@ -1032,7 +1094,7 @@ $TRANSITION: all 0.3s ease;
     
     .body-container {
         margin-top: 0;
-        padding: 47px 10px 10px 10px;
+        padding-top: 47px;
 
         .major-box { float: none; width: 100%; padding: 0; }
         
@@ -1045,10 +1107,6 @@ $TRANSITION: all 0.3s ease;
 
     .articles-box {
         .articles-group { padding-left: 0; }
-    }
-
-    .message-box {
-        .respond-box { padding: 10px 20px; }
     }
 
     .links-box {

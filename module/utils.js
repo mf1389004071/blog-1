@@ -17,9 +17,9 @@ function createPage(page, countNumber, url) {
 
 	var first = '', numberPageL = '', numberPage = '', numberPageR = '', last = '';
 
-	first = "<li><a type='ajax_a' href='" + url + "/page/1'>first</a></li>"
+	first = "<li><a type='ajax_a' href='" + url + "/page/1'> < </a></li>"
 
-	last = "<li><a type='ajax_a' href='" + url + "/page/" + countPage + "'>last</a></li>"
+	last = "<li><a type='ajax_a' href='" + url + "/page/" + countPage + "'> > </a></li>"
 
 	for(var i = pageOffSet; i >= 1; i--) {
 		var tempNumberL = page - i

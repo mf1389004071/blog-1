@@ -11,19 +11,23 @@
     "marked": "^0.3.17",
     "moment": "^2.21.0",
     "mongoose": "^5.0.12",
-    "node-sass": "^4.7.2",
+    "node-sass": "^4.9.0",
     "nodemailer": "^4.6.0",
+    "npm": "^6.1.0",
     "pug": "^2.0.0-rc.4"
   },
   "devDependencies": {
     "del": "^3.0.0",
     "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^5.0.0",
     "gulp-notify": "^3.2.0",
-    "gulp-sass": "^3.1.0"
+    "gulp-px2rem": "^1.0.12",
+    "gulp-sass": "^4.0.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "node app.js",
+    "build": "gulp"
   },
   "author": "miiiku",
   "license": "ISC"

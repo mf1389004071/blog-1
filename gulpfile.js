@@ -1,8 +1,10 @@
 // load plugins
-var del 	= require('del')
-var gulp 	= require('gulp')
-var sass 	= require('gulp-sass')
-var notify 	= require('gulp-notify')
+const del 		= require('del')
+const gulp 		= require('gulp')
+const sass 		= require('gulp-sass')
+const notify 	= require('gulp-notify')
+const px2rem 	= require('gulp-px2rem')
+const autoprefixer = require('gulp-autoprefixer')
 
 
 // 清除文件任务
@@ -16,10 +18,14 @@ gulp.task('css', function() {
 	return gulp.src('style/*.scss')
 	// 编译 编译输出形式为expanded
 	.pipe(sass({outputStyle: 'expanded'}))
+	// 添加前缀
+	.pipe(autoprefixer())
+	// px转rem
+	.pipe(px2rem())
 	// 保存到指定目录
 	.pipe(gulp.dest('assets/css/'))
 	// 提示任务完成！
-	.pipe(notify({message: 'Style task complete!'}));
+	.pipe(notify({message: 'Style task complete!'}))
 })
 
 // 默认命令

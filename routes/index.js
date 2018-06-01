@@ -63,6 +63,7 @@ router.get('/category/:type', function(req, res) {
 	var type = req.params.type
 	
 	fetchArticle({ type, page: 1 }, '/category/' + type, data => {
+		data.title = type + ' - ' + data.title
 		res.render('page/index', data)
 	}, error => {
 		console.log(error)
@@ -75,6 +76,7 @@ router.get('/category/:type/page/:page', function(req, res) {
 	var page = req.params.page
 	
 	fetchArticle({ type, page }, '/category/' + type, data => {
+		data.title = type + ' - ' + data.title
 		res.render('page/index', data)
 	}, error => {
 		console.log(error)
@@ -85,6 +87,7 @@ router.get('/category/:type/page/:page', function(req, res) {
 router.get('/tag/:tag', function(req, res) {
 	var tag = req.params.tag
 	fetchArticle({ tag, page: 1 }, '/tag/' + tag, data => {
+		data.title = tag + ' - ' + data.title
 		res.render('page/index', data)
 	}, error => {
 		console.log(error)
@@ -96,6 +99,7 @@ router.get('/tag/:tag/page/:page', function(req, res) {
 	let page = req.params.page
 	
 	fetchArticle({ tag, page }, '/tag/' + tag, data => {
+		data.title = tag + ' - ' + data.title
 		res.render('page/index', data)
 	}, error => {
 		console.log(error)
@@ -107,7 +111,7 @@ router.get('/search/:keyword', function(req, res) {
 	let keyword = req.params.keyword
 	
 	fetchArticle({ keyword, page: 1 }, '/search/' + keyword, data => {
-		data.meta_title = keyword + ' - ' + data.title
+		data.title = keyword + ' - ' + data.title
 		res.render('page/index', data)
 	}, error => {
 		console.log(error)
@@ -119,6 +123,7 @@ router.get('/search/:keyword/page/:page', function(req, res) {
 	let page = req.params.page
 	
 	fetchArticle({ keyword, page }, '/search/' + search, data => {
+		data.title = keyword + ' - ' + data.title
 		res.render('page/index', data)
 	}, error => {
 		console.log(error)
@@ -172,6 +177,7 @@ router.get('/article/:_id', function(req, res) {
 		.then(function(resolve) {
 			utils.GetCommon(result => {
 				result.user = user
+				result.title = resolve[0].article.title + ' - ' + result.title
 				resolve.forEach(function(item, index) { result = Object.assign(result, item) })
 				res.render('page/article', result)
 			})
@@ -189,7 +195,7 @@ router.get('/articles', function(req, res) {
 	Article.fetchTime(function(err, articles) {
 		if(err) return res.end(err)
 		utils.GetCommon(result => {
-			result.meta_title = "归档 - " + result.title
+			result.title = "归档 - " + result.title
 			result.articles = articles
 			res.render('page/articles', result)
 		})
@@ -216,7 +222,7 @@ router.get('/links', function(req, res) {
 		}
 
 		utils.GetCommon(result => {
-			result.meta_title = '友链 - ' + result.title
+			result.title = '友链 - ' + result.title
 			result.links = links
 			res.render('page/link', result)
 		})
@@ -229,7 +235,7 @@ router.get('/links', function(req, res) {
 router.get('/about', function(req, res) {
 	utils.GetCommon(result => {
 		let about = marked(fs.readFileSync('./html/about.md', 'utf8'));
-		result.meta_title = '关于 - ' + result.title
+		result.title = '关于 - ' + result.title
 		result.html = about
 		res.render('page/about', result)
 	})
@@ -243,7 +249,7 @@ router.get('/message', function(req, res) {
 		if(err) return res.send(err)
 		utils.formatReply('message', messages).then(messages => {
 			utils.GetCommon(result => {
-				result.meta_title = '留言 - ' + result.title
+				result.title = '留言 - ' + result.title
 				result.messages = messages
 				result.user = user
 				res.render('page/message', result)

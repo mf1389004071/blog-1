@@ -130,18 +130,38 @@ ArticleSchema.statics = {
 		.exec(callback)
 	},
 	fetchTime: function(callback) {
+		// var operation = [
+		// 	{
+		// 		$group: {
+		// 			_id: { $dateToString: {format: '%Y-%m', date: '$datetime'}},
+		// 			count: { $sum: 1 },
+		// 			id: { $push: '$_id' },
+		// 			title: { $push: '$title' },
+		// 			datetime: { $push: '$datetime' },
+		// 			pageview: { $push: '$pageview' },
+		// 		}
+		// 	},
+		// 	{
+		// 		$sort: {_id: -1}
+		// 	}
+		// ]
+
 		var operation = [
 			{
+				$sort: { _id: -1 }
+			},
+			{
 				$group: {
-					_id: { $dateToString: {format: '%Y-%m', date: '$datetime'}},
+					_id: { $dateToString: { format: '%Y', date: '$datetime' } },
 					count: { $sum: 1 },
 					id: { $push: '$_id' },
 					title: { $push: '$title' },
+					datetime: { $push: { $dateToString: { format: '%m-%d', date: '$datetime' } } },
 					pageview: { $push: '$pageview' }
 				}
 			},
 			{
-				$sort: {_id: -1}
+				$sort: { _id: -1 }
 			}
 		]
 
